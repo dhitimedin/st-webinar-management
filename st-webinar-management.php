@@ -7,9 +7,8 @@
  * Requires PHP:      7.2
  * Author:            Sagacitas Technologies Pvt. Ltd.
  * Author URI:        https://linkedin.com/in/nisitkumar
- * License:           GPL v2 or later
- * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Update URI:        https://example.com/my-plugin/
+ * License:           GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
+ * License URI:       https://www.gnu.org/licenses/gpl-3.0.en.html
  * Text Domain:       st-webinar-management
  * Domain Path:       /languages
  *

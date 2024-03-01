@@ -86,7 +86,7 @@ We welcome contributions to this project! Please see the `CONTRIBUTING.md` file 
 
 # License
 
-This plugin is licensed under the MIT License. See the `LICENSE` file for details.
+This plugin is licensed under the **GNU GENERAL PUBLIC LICENSE** Version 3, 29 June 2007. You can find a copy of the license in the `LICENSE` file included in this plugin.
 
 # Additional Notes:
 
