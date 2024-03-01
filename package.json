@@ -1,0 +1,54 @@
+{
+	"name": "st-plugin-management",
+	"version": "1.0.0",
+	"description": "Streamline webinar management directly from your WordPress site.",
+	"directories": {
+		"test": "tests"
+	},
+	"scripts": {
+		"watch": "clear && webpack --watch --mode development",
+		"compile": "clear && webpack --progress --mode production",
+		"translate": "wp i18n make-pot ./ languages/smoobu-calendar.pot --include='classes,views,src,./*.php' --ignore-domain --allow-root",
+		"build": "clear && grunt preBuildClean && npm run compile && npm run translate && grunt build:pro && grunt finish"
+	},
+	"author": "Sagacitas Technologies Pvt. Ltd.",
+	"license": "GPL-3.0",
+	"dependencies": {
+		"@wordpress/api-fetch": "^6.43.0",
+		"@wordpress/element": "^5.23.0",
+		"@wpmudev/shared-ui": "2.12.23",
+		"path": "^0.12.7"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.17.8",
+		"@babel/preset-env": "^7.16.11",
+		"@babel/preset-react": "^7.16.7",
+		"@floatwork/grunt-po2mo": "^0.4.1",
+		"@wordpress/scripts": "^26.17.0",
+		"babel-loader": "^8.2.4",
+		"clean-webpack-plugin": "^4.0.0",
+		"copy-webpack-plugin": "^12.0.2",
+		"css-loader": "^6.7.1",
+		"eslint-plugin-react": "^7.29.4",
+		"grunt": "^1.6.1",
+		"grunt-checktextdomain": "^1.0.1",
+		"grunt-contrib-clean": "^2.0.0",
+		"grunt-contrib-compress": "^1.6.0",
+		"grunt-contrib-copy": "^1.0.0",
+		"grunt-contrib-rename": "^0.2.0",
+		"grunt-exec": "^3.0.0",
+		"grunt-phpunit": "^0.3.6",
+		"grunt-replace": "^1.0.1",
+		"grunt-search": "^0.1.8",
+		"grunt-wp-i18n": "^1.0.3",
+		"load-grunt-tasks": "^5.1.0",
+		"mini-css-extract-plugin": "^2.6.0",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"sass": "^1.56.1",
+		"sass-loader": "^12.6.0",
+		"style-loader": "^3.3.1",
+		"webpack": "^5.70.0",
+		"webpack-cli": "^4.9.2"
+	}
+}
