@@ -36,7 +36,7 @@ Streamline webinar management directly from your WordPress site. This plugin pro
     Bash
 
     ```
-    git clone https://github.com/your-username/webinar-management-plugin.git
+    git clone https://github.com/dhitimedin/webinar-management-plugin.git
 
     ```
 
@@ -80,3 +80,17 @@ Install npm packages
 | `npm run build`  | Build production ready bundle inside `/build/` folder |
 
 
+# Contributing
+
+We welcome contributions to this project! Please see the CONTRIBUTING.md file for guidelines.
+
+# License
+
+This plugin is licensed under the MIT License. See the LICENSE file for details.
+
+# Additional Notes:
+
+Consider using a plugin like "CMB2" to simplify custom meta box creation.
+Implement proper validation and sanitization for user input.
+Employ security measures to protect sensitive data like registration information.
+Design custom CSS styles to achieve the desired UI for different elements.
