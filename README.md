@@ -82,15 +82,15 @@ Install npm packages
 
 # Contributing
 
-We welcome contributions to this project! Please see the CONTRIBUTING.md file for guidelines.
+We welcome contributions to this project! Please see the `CONTRIBUTING.md` file for guidelines.
 
 # License
 
-This plugin is licensed under the MIT License. See the LICENSE file for details.
+This plugin is licensed under the MIT License. See the `LICENSE` file for details.
 
 # Additional Notes:
 
-Consider using a plugin like "CMB2" to simplify custom meta box creation.
-Implement proper validation and sanitization for user input.
-Employ security measures to protect sensitive data like registration information.
-Design custom CSS styles to achieve the desired UI for different elements.
+-   Consider using a plugin like "CMB2" to simplify custom meta box creation.
+-   Implement proper validation and sanitization for user input.
+-   Employ security measures to protect sensitive data like registration information.
+-   Design custom CSS styles to achieve the desired UI for different elements.
