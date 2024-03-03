@@ -60,7 +60,7 @@ function SWM() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName
 	return ST_Webinar_Management::instance();
 }
 
-$GLOBALS['st_connector_app'] = SWM();
+$GLOBALS['st_webinar_management_app'] = SWM();
 
 // Activation - works with symlinks.
 register_activation_hook(
