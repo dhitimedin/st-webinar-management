@@ -8,7 +8,7 @@
 	"scripts": {
 		"watch": "clear && webpack --watch --mode development",
 		"compile": "clear && webpack --progress --mode production",
-		"translate": "wp i18n make-pot ./ languages/smoobu-calendar.pot --include='classes,views,src,./*.php' --ignore-domain --allow-root",
+		"translate": "wp i18n make-pot ./ languages/st-webinar-management.pot --include='classes,views,src,./*.php' --ignore-domain --allow-root",
 		"build": "clear && grunt preBuildClean && npm run compile && npm run translate && grunt build:pro && grunt finish"
 	},
 	"author": "Sagacitas Technologies Pvt. Ltd.",

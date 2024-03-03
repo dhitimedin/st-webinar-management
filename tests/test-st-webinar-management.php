@@ -2,7 +2,7 @@
 /**
  * Class ST_Webinar_Management_Test
  *
- * @package smoobu-calendar
+ * @package st-webinar-management
  */
 
 use PHPUnit\Framework\TestCase;

@@ -2,7 +2,7 @@
 /**
  * PHPUnit bootstrap file.
  *
- * @package ST_Detrack_Connector_Test
+ * @package ST_Webinar_Management_Test
  */
 
  require dirname( dirname( __FILE__ ) ) . '/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
@@ -31,7 +31,7 @@ require_once "{$_tests_dir}/includes/functions.php";
  * Manually load the plugin being tested.
  */
 function _manually_load_plugin() {
-	require dirname( dirname( __FILE__ ) ) . '/smoobu-calendar.php';
+	require dirname( dirname( __FILE__ ) ) . '/st-webinar-management.php';
 }
 
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );

@@ -28,6 +28,7 @@ Streamline webinar management directly from your WordPress site. This plugin pro
 -   PHP 7.4+
 -   MySQL 5.6+
 -   Node.js and npm
+-   WordPress 5.8+
 
 ## Installation
 

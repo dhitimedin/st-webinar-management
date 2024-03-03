@@ -2,7 +2,7 @@
 /**
  * Class SampleTest
  *
- * @package smoobu-calendar
+ * @package st-webinar-management
  */
 
 /**
