@@ -8,11 +8,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin'); // Import the copy-web
 module.exports = {
     ...defaultConfig,
     entry: {
-        'main': './src/js/main.js',
-        'main-checkout': './src/js/main-checkout.js',
-       /*  'index.umd': './src/js/index.umd.js', */
-        'blocks/calendar': './src/js/blocks/calendar.jsx',
-        'admin/main': './src/js/admin/main.js'
+        'webinar': './src/js/block-editor-script.jsx'
     },
 
     output: {
@@ -83,30 +79,6 @@ module.exports = {
         new CleanWebpackPlugin(),
         new MiniCssExtractPlugin({
             filename: '../css/[name].min.css',
-        }),
-         new CopyWebpackPlugin({
-            patterns: [
-                {
-                    from: './src/scss/dark/theme.css',
-                    to: '../css/dark/theme.css',
-                },
-                {
-                    from: './src/scss/default/theme.css',
-                    to: '../css/default/theme.css',
-                },
-                {
-                    from: './src/js/index.umd.js',
-                    to: '../js/index.umd.js',
-                },
-                {
-                    from: './src/scss/index.css',
-                    to: '../css/index.css',
-                },
-                {
-                    from: './src/scss/hotel-example.css',
-                    to: '../css/hotel-example.css',
-                },
-            ],
         }),
     ],
 
