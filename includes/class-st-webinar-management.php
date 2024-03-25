@@ -126,7 +126,9 @@ class ST_Webinar_Management {
 				'capability_type' => 'post',
 				'rewrite'         => array( 'slug' => 'webinar' ),
 				'taxonomies'      => array( 'webinar_type' ), // Assign webinar_type taxonomy.
-				'template'        => 'st-webinar-management/webinar',
+				'template'        => array(
+					array( 'st-webinar-management/webinar' ),
+				),
 				'template_lock'   => 'all',
 			)
 		);

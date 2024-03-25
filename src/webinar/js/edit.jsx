@@ -10,9 +10,6 @@ import { __ } from '@wordpress/i18n';
 
 export default function Edit( { attributes, setAttributes } ) {
     const postTitle = wp.data.select( 'core/editor' ).getCurrentPost().title;
- 		const {
-        webinarId,
-    } = attributes;
 
     const modalRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
