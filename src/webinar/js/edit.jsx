@@ -214,77 +214,99 @@ export default function Edit( { attributes, setAttributes } ) {
                         value={ subtitle }
                         onChange={ onChangeSubtitle }
                     />
-                    <div style={ { display: 'flex', position: 'relative' } }>
-                        <input
-                            type="text"
-                            placeholder={ __( 'Start Date & Time', 'st-webinar-management' ) }
-                            onFocus={ onOpenStartDatePicker }
-                            value={ startDate }
-                            readOnly // Disable text input
-                            onClick={(event) => {
-                                event.stopPropagation(); // Prevent click from bubbling up
-                                setIsStartDatePickerOpen(true);
-                            }}
-                        />
-                        {isStartDatePickerOpen && (
-                            <div className="webinar-date-time-picker">
-                                <DateTimePicker
-                                    currentDate={ startDate }
-                                    onChange={ onChangeStartDate }
-                                    onClose={ onCloseDatePicker }
-                                />
-                            </div>
-                        )}
-                    </div>
-                    <div style={ { display: 'flex', position: 'relative' } }>
-                        <input
-                            type="text"
-                            placeholder={ __( 'End Date & Times', 'st-webinar-management' ) }
-                            onFocus={ onOpenEndDatePicker }
-                            value={ endDate }
-                            readOnly // Disable text input
-                            onClick={(event) => {
-                                event.stopPropagation(); // Prevent click from bubbling up
-                                setIsEndDatePickerOpen(true);
-                            }}
-                        />
-                        {isEndDatePickerOpen && (
-                            <div className="webinar-date-time-picker">
-                                <DateTimePicker
-                                    currentDate={ endDate }
-                                    onChange={ onChangeEndDate }
-                                    onClose={ onCloseDatePicker }
-                                />
-                            </div>
-                        )}
-                    </div>
-                    <div style={ { display: 'flex', position: 'relative' } }>
-                        <TextControl
-                            label={ __( 'Duration', 'st-webinar-management' ) }
-                            value={ duration }
-                            onChange={ (value) => {
-                                // Validate duration if entered manually
-                                console.log( value );
-                                if (validateDuration(value)) {
-                                    console.log( 'validate' );
-                                      setAttributes({ duration: value });
-                                }
-                            }}
-                            onClick={ (event) => {
-                                event.stopPropagation();  // Prevent click from bubbling up
-                                toggleModal();
-                            }} // Open modal on click
-                            // readOnly // Disable text input
-                        />
-                        <div ref={modalRef} className={`duration-picker-modal ${isOpen ? 'active' : ''}`} onClick={(e) => e.stopPropagation()}>
-                            {isOpen && (
-                                <DurationPicker
-                                    onChange={ onChangeDuration }
-                                    initialDuration={{ hours: 0, minutes: 0 }} // Set initial duration
-                                    showSeconds={false} // Hide seconds selection
-                                />
+                    <div style={ { display: 'flex', justifyContent: 'space-between' } }>
+                        <div className={'webinar-date-time-duration-container'} >
+                            <label className={'webinar-label'} htmlFor="startDateInput">  {/* Label with for attribute */}
+                                {__( 'Begins at', 'st-webinar-management' )}
+                            </label>
+                            <input
+                                type="text"
+                                id="startDateInput"
+                                placeholder={ __( 'Start Date & Time', 'st-webinar-management' ) }
+                                onFocus={ onOpenStartDatePicker }
+                                value={ startDate }
+                                readOnly // Disable text input
+                                onClick={(event) => {
+                                    event.stopPropagation(); // Prevent click from bubbling up
+                                    setIsStartDatePickerOpen(true);
+                                }}
+                            />
+                            {isStartDatePickerOpen && (
+                                <div className="webinar-date-time-picker">
+                                    <DateTimePicker
+                                        currentDate={ startDate }
+                                        onChange={ onChangeStartDate }
+                                        onClose={ onCloseDatePicker }
+                                    />
+                                </div>
                             )}
                         </div>
+                        <div className={'webinar-date-time-duration-container'}>
+                            <label className={'webinar-label'} htmlFor="endDateInput">  {/* Label with for attribute */}
+                                {__( 'Ends at', 'st-webinar-management' )}
+                            </label>
+                            <input
+                                type="text"
+                                id="endDateInput"
+                                placeholder={ __( 'End Date & Times', 'st-webinar-management' ) }
+                                onFocus={ onOpenEndDatePicker }
+                                value={ endDate }
+                                readOnly // Disable text input
+                                onClick={(event) => {
+                                    event.stopPropagation(); // Prevent click from bubbling up
+                                    setIsEndDatePickerOpen(true);
+                                }}
+                            />
+                            {isEndDatePickerOpen && (
+                                <div className="webinar-date-time-picker">
+                                    <DateTimePicker
+                                        currentDate={ endDate }
+                                        onChange={ onChangeEndDate }
+                                        onClose={ onCloseDatePicker }
+                                    />
+                                </div>
+                            )}
+                        </div>
+                        <div style={ { display: 'flex', position: 'relative' } }>
+                            <TextControl
+                                label={ __( 'Duration', 'st-webinar-management' ) }
+                                value={ duration }
+                                onChange={ (value) => {
+                                    // Validate duration if entered manually
+                                    console.log( value );
+                                    if (validateDuration(value)) {
+                                        console.log( 'validate' );
+                                        setAttributes({ duration: value });
+                                    }
+                                }}
+                                onClick={ (event) => {
+                                    event.stopPropagation();  // Prevent click from bubbling up
+                                    toggleModal();
+                                }} // Open modal on click
+                                // readOnly // Disable text input
+                            />
+                            <div ref={modalRef} className={`duration-picker-modal ${isOpen ? 'active' : ''}`} onClick={(e) => e.stopPropagation()}>
+                                {isOpen && (
+                                    <DurationPicker
+                                        onChange={ onChangeDuration }
+                                        initialDuration={{ hours: 0, minutes: 0 }} // Set initial duration
+                                        showSeconds={false} // Hide seconds selection
+                                    />
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                    <div style={ { display: 'flex', justifyContent: 'space-between' } }>
+                        <TextControl
+                            label={ __( 'Registration Form', 'st-webinar-management' ) }
+                            value={ registrationForm }
+                            onChange={ onChangeRegistrationForm }
+                        />
+                        <TextControl
+                            label={ __( 'Streaming Link', 'st-webinar-management' ) }
+                            value={ streamingLink }
+                            onChange={ onChangeStreamingLink }
+                        />
                     </div>
                     <TextareaControl
                         label={ __( 'Description', 'st-webinar-management' ) }
@@ -292,16 +314,6 @@ export default function Edit( { attributes, setAttributes } ) {
                         onChange={ onChangeDescription }
                         allowedBlocks={ ['core/paragraph'] } // Restrict to paragraph blocks
 					/>
-                    <TextControl
-                        label={ __( 'Registration Form', 'st-webinar-management' ) }
-                        value={ registrationForm }
-                        onChange={ onChangeRegistrationForm }
-                    />
-                    <TextControl
-                        label={ __( 'Streaming Link', 'st-webinar-management' ) }
-                        value={ streamingLink }
-                        onChange={ onChangeStreamingLink }
-                    />
                 </div>
             </div>
         </>
