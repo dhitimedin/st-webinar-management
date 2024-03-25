@@ -57,9 +57,17 @@ class ST_Webinar_Management {
 
 		add_action( 'init', array( $this, 'st_webinar_management_init' ) );
 
-		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_webinar_script' ) );
+		add_action( 'init', array( $this, 'st_register_webinar_blocks' ) );
+
+		add_action( 'init', array( $this, 'st_register_post_meta' ) );
+
+
+		// add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_webinar_script' ) );
 
 		add_action( 'save_post', array( $this, 'save_webinar_block' ), 10, 2 );
+
+		// Restrict allowed block type for webinar custom post to paragraph and highlights.
+		add_filter( 'allowed_block_types', array( $this, 'restrict_webinar_blocks' ), 10, 2 );
 	}
 
 
@@ -107,69 +115,22 @@ class ST_Webinar_Management {
 				),
 				'public'          => true,
 				'has_archive'     => true,
-				'supports'        => array( 'title', 'editor', 'thumbnail' ), // Add basic support.
+				'supports'        => array(
+					'title',
+					'editor',
+					'thumbnail',
+					'custom-fields',
+				), // Add basic support.
 				'menu_icon'       => 'dashicons-megaphone',
 				'show_in_rest'    => true,
 				'capability_type' => 'post',
 				'rewrite'         => array( 'slug' => 'webinar' ),
 				'taxonomies'      => array( 'webinar_type' ), // Assign webinar_type taxonomy.
-				// 'register_meta_box_cb' => array( $this, 'st_webinar_management_meta_boxes' ), // Register custom meta boxes.
-				'custom_fields'   => array(
-					// Custom fields for webinar details.
-					'webinar_subtitle'          => array(
-						'label' => __( 'Subtitle', 'st-webinar-management' ),
-					),
-					'webinar_start_time'        => array(
-						'label' => __( 'Start Time (Datetime)', 'st-webinar-management' ),
-						'type'  => 'datetime-local', // Use specific type.
-					),
-					'webinar_end_time'          => array(
-						'label' => __( 'End Time (Datetime)', 'st-webinar-management' ),
-						'type'  => 'datetime-local', // Use specific type.
-					),
-					'webinar_duration'          => array(
-						'label' => __( 'Duration', 'st-webinar-management' ),
-					),
-					'webinar_description'       => array(
-						'label' => __( 'Description', 'st-webinar-management' ),
-						'type'  => 'string', // Allows HTML by default.
-					),
-					'webinar_registration_form' => array(
-						'label' => __( 'Registration Form', 'st-webinar-management' ),
-						'type'  => 'string', // Use for storing form code (e.g., shortcode).
-					),
-					'webinar_streaming_link'    => array(
-						'label' => __( 'Streaming Platform Link', 'st-webinar-management' ),
-						'type'  => 'string', // URL.
-					),
-					'webinar_highlights'        => array(
-						'label'      => __( 'Highlights', 'st-webinar-management' ),
-						'type'       => 'st-webinar-management/highlights', // Use our custom block.
-						'attributes' => array(
-							'highlights' => array(
-								'type'    => 'array',
-								'default' => array(),
-							),
-						),
-					),
-				/*
-								  'webinar_highlights'        => array( // Array for storing multiple highlights.
-						'label'      => __( 'Highlights', 'st-webinar-management' ),
-						'type'       => 'repeater', // Use a repeater field plugin for this.
-						'sub_fields' => array(
-							'highlight_time'        => array(
-								'label' => __( 'Highlight Time', 'st-webinar-management' ),
-								'type'  => 'time',
-							),
-							'highlight_description' => array(
-								'label' => __( 'Highlight Description', 'st-webinar-management' ),
-								'type'  => 'string',
-							),
-						),
-					), */
-				),
+				'template'        => 'st-webinar-management/webinar',
+				'template_lock'   => 'all',
 			)
 		);
+
 
 		// Create the custom taxonomy 'webinar_category'.
 		$labels = array(
@@ -189,14 +150,65 @@ class ST_Webinar_Management {
 					'slug'       => '', // No slug in the URL (top-level).
 					'with_front' => false, // Remove "index.php" in permalinks.
 				),
+				'show_in_rest' => true,
 			)
 		);
 
 	}
 
+
+	/**
+	 * Registers the blocks webinar and highlihts.
+	 *
+	 * @return void
+	 */
+	public function st_register_webinar_blocks() {
+		register_block_type( ST_WEBINAR_MANAGEMENT_PLUGIN_DIR . '/assets/webinar' );
+	}
+
+
+	/**
+	 * Register custom meta fields for webinar post.
+	 *
+	 * @return void
+	 */
+	public function st_register_post_meta() {
+		// Registering custom post meta.
+		$custom_fields = array(
+			'subtitle'         => array( 'string', 'wp_kses_post' ),
+			'startDate'        => array( 'string', 'wp_kses_post' ),
+			'endDate'          => array( 'string', 'wp_kses_post' ),
+			'duration'         => array( 'string', 'wp_kses_post' ),
+			'description'      => array( 'string', 'wp_kses_post' ),
+			'registrationForm' => array( 'string', 'esc_url' ),
+			'streamingLink'    => array( 'string', 'esc_url' ),
+			'speakers'         => array( 'array', 'wp_kses_post' ),
+			'webinarType'      => array( 'string', 'wp_kses_post' ),
+		);
+
+		foreach ( $custom_fields as $key => $value ) {
+			register_post_meta(
+				'webinar',
+				$key,
+				array(
+					'show_in_rest'      => true,
+					'single'            => true,
+					'type'              => $value[0],
+					'sanitize_callback' => $value[1],
+				)
+			);
+		}
+	}
+
+
+	/**
+	 * Enqueues all block scripts.
+	 *
+	 * @return void
+	 */
 	public function enqueue_webinar_script() {
 
-		$asset_file = ST_WEBINAR_MANAGEMENT_PLUGIN_DIR . '/assets/js/webinar.min.asset.php';
+		$asset_file = ST_WEBINAR_MANAGEMENT_PLUGIN_DIR . '/assets/webinar/js/webinar.min.asset.php';
 
 		if ( file_exists( $asset_file ) ) {
 			$asset_data = require $asset_file;
@@ -205,7 +217,7 @@ class ST_Webinar_Management {
 			if ( 'webinar' === $screen->post_type && $screen->is_block_editor ) {
 				wp_enqueue_script(
 					'webinar-block',
-					ST_WEBINAR_MANAGEMENT_PLUGIN_URL . '/assets/js/webinar.min.js',
+					ST_WEBINAR_MANAGEMENT_PLUGIN_URL . '/assets/webinar/js/webinar.min.js',
 					$asset_data['dependencies'],
 					$asset_data['version'],
 					true
@@ -214,7 +226,7 @@ class ST_Webinar_Management {
 				// Enqueue the stylesheet from the asset file.
 				wp_enqueue_style(
 					'webinar-block-style',
-					ST_WEBINAR_MANAGEMENT_PLUGIN_URL . '/assets/css/webinar.min.css',
+					ST_WEBINAR_MANAGEMENT_PLUGIN_URL . '/assets/webinar/css/webinar.min.css',
 					array(),
 					$asset_data['version']
 				);
@@ -242,33 +254,18 @@ class ST_Webinar_Management {
 		// ... (implement data saving using ACF or custom meta fields)
 	}
 
-
 	/**
-	 * Registers custom meta boxes for the webinar post type.
+	 * Restricts Webinar custom post to have only paragraph and highlight blocks.
 	 *
-	 * @return void
+	 * @param array   $allowed_blocks aray of blocks allowed for this post.
+	 * @param WP_Post $post           post object.
+	 * @return array
 	 */
-	public function st_webinar_management_meta_boxes() {
-		// Add meta box for webinar details.
-		add_meta_box(
-			'webinar_details',
-			__( 'Webinar Details', 'st-webinar-management' ),
-			array( $this, 'render_webinar_details_meta_box' ),
-			'webinar',
-			'normal',
-			'default'
-		);
-	}
-
-	/**
-	 * Renders the meta box for webinar details.
-	 *
-	 * @param WP_Post $post The current post object.
-	 * @return void
-	 */
-	public function render_webinar_details_meta_box( $post ) {
-		// Include the template file for rendering the meta box content.
-		include_once ST_WEBINAR_MANAGEMENT_PLUGIN_DIR . '/includes/admin/views/webinar-details.php';
+	public function restrict_webinar_blocks( $allowed_blocks, $post ) {
+		if ( 'webinar' === $post->post_type ) {
+			return array( 'core/paragraph', 'st-webinar-management/webinar' );
+		}
+		return $allowed_blocks; // Return default blocks for other post types.
 	}
 
 	/**

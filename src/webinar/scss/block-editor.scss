@@ -27,25 +27,34 @@
 		top: calc(100% + 5px); /* Position below the input field */
 		left: 0;
 		padding: 10px; /* Add some padding */
-		/* display: none;  *//* Initially hide the picker */
 		background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-		display: flex; /* Center the content horizontally */
 		justify-content: center;
 		align-items: center;
 		z-index: 100; /* Ensure modal has higher stacking context */
-		/* opacity: 0;  *//* Initially hidden */
-		/*visibility: hidden;*/ /* Initially hidden */
+		display: none;
 		transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out; /* Add smooth transition */
-	  }
 
-	  .duration-picker-modal.active {
-		opacity: 1; /* Modal becomes visible */
-		visibility: visible; /* Modal becomes visible */
-	  }
-
-	  .duration-picker-modal .react-duration-picker__container {
-		/* Style the duration picker component itself */
-		/* You can customize styles here based on react-duration-picker documentation */
-	  }
+		&.active {
+			display: flex; /* Center the content horizontally */
+		}
+		.react-duration-picker__container {
+			/* Style the duration picker component itself */
+			/* You can customize styles here based on react-duration-picker documentation */
+		}
+		.rdp-picker {
+			.rdp-column-container {
+				.rdp-masked-div {
+					.rdp-text-overlay{
+						div {
+							display: flex;
+						}
+					}
+				}
+			}
+			.rdp-column-container:nth-child(3) {
+				display: none;
+			}
+		}
+	}
 
 }

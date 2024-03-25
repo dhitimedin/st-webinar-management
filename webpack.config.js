@@ -8,14 +8,19 @@ const CopyWebpackPlugin = require('copy-webpack-plugin'); // Import the copy-web
 module.exports = {
     ...defaultConfig,
     entry: {
-        'webinar': './src/js/block-editor-script.jsx'
+        'webinar': './src/webinar/js/block-editor-script.jsx'
     },
 
     output: {
-        path: path.resolve(__dirname, './assets/js'),
-        filename: '[name].min.js',
-        publicPath: '../../',
-        assetModuleFilename: 'images/[name][ext][query]',
+        path: path.resolve(__dirname, './assets'),
+        filename: ({ chunk }) => {
+            const folderName = chunk.name.split('/')[0]; // Get the folder name from the entry point
+            return `${folderName}/js/[name].min.js`;
+        },
+        assetModuleFilename: ({ filename }) => {
+            const folderName = path.dirname(filename).split('/')[0]; // Get the folder name from the source file
+            return `${folderName}/images/[name][ext][query]`;
+        },
         clean: true,
     },
 
@@ -45,6 +50,11 @@ module.exports = {
 						loader: MiniCssExtractPlugin.loader,
 						options: {
 							esModule: false,
+                            publicPath: (resourcePath, context) => {
+                                // publicPath is the relative path from the output directory to the assets
+                                // In this case, it should be 'webinar/css/'
+                                return path.relative(path.dirname(resourcePath), path.join(context, 'webinar/css')).replace(/\\/g, '/');
+                            },
 						},
 					},
 					{
@@ -61,7 +71,10 @@ module.exports = {
                 test: /\.(png|jpg|gif)$/,
                 type: 'asset/resource',
                 generator: {
-                    filename: '../images/[name][ext][query]',
+                    filename: (pathData) => {
+                        const relativePath = path.relative(path.resolve(__dirname, 'src'), pathData.filename);
+                        return `images/${relativePath}`;
+                    },
                 },
             },
             {
@@ -78,7 +91,22 @@ module.exports = {
         ...defaultConfig.plugins,
         new CleanWebpackPlugin(),
         new MiniCssExtractPlugin({
-            filename: '../css/[name].min.css',
+            filename: ({ chunk }) => {
+                const folderName = chunk.name.split('/')[0]; // Get the folder name from the entry point
+                return `${folderName}/css/[name].min.css`;
+            },
+        }),
+        new CopyWebpackPlugin({
+            patterns: [
+              {
+                from: path.resolve(__dirname, 'src/**/block.json'),
+                to({ context, absoluteFilename }) {
+                  const relativePath = path.relative(context, absoluteFilename);
+                  return path.resolve(__dirname, 'assets', relativePath);
+                },
+                context: path.resolve(__dirname, 'src'),
+              },
+            ],
         }),
     ],
 

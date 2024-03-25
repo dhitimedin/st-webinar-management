@@ -1,0 +1,54 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"name": "st-webinar-management/webinar",
+	"title": "Webinar",
+	"icon": "dashicons-megaphone",
+	"category": "common",
+	"keywords": ["webinar", "presentation", "event"],
+	"textdomain": "st-webinar-management",
+	"attributes": {
+		"webinarId": {
+		 	"type": "number"
+		},
+		"title": {
+			"type": "string"
+		},
+		"subtitle": {
+			"type": "string"
+		},
+		"thumbnail": {
+			"type": "object"
+		},
+		"startDate": {
+			"type": "string"
+		},
+		"endDate": {
+			"type": "string"
+		},
+		"duration": {
+			"type": "string"
+		},
+		"description": {
+			"type": "string"
+		},
+		"registrationForm": {
+			"type": "string"
+		},
+		"streamingLink": {
+			"type": "string"
+		},
+		"speakers": {
+			"type": "array",
+			"default": []
+		},
+		"webinarType": {
+			"type": "string",
+			"default": null
+		}
+	},
+    "script": "file:./js/webinar.min.js",
+	"style": "file:./css/webinar.min.css",
+    "supports": {
+		"anchor": true
+   	}
+}
