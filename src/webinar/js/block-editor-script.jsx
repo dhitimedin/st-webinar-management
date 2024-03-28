@@ -1,5 +1,5 @@
 import { registerBlockType } from '@wordpress/blocks';
-import { useBlockProps } from '@wordpress/block-editor';
+import { useBlockProps, InnerBlocks, RichText } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import metadata from '../block.json';
@@ -14,7 +14,13 @@ registerBlockType( metadata.name /* 'st-webinar-management/webinar' */, {
 	edit: Edit,
 	save: ( { attributes } ) => {
         const blockProps = useBlockProps.save();
-		return null;
+		return (
+			<RichText.Content
+				{ ...blockProps }
+				tagName="p"
+				value={ attributes.description }
+			/>
+		);
 	},
 } );
 

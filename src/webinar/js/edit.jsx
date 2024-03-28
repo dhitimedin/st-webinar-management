@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from '@wordpress/element';
-import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
+import { InspectorControls, useBlockProps, InnerBlocks, RichText } from '@wordpress/block-editor';
 import { PanelBody, TextControl, TextareaControl, DateTimePicker, SelectControl, BaseControl, CheckboxControl } from '@wordpress/components';
 import DurationPicker from 'react-duration-picker';
 import {MediaUpload} from '@wordpress/block-editor';
@@ -120,24 +120,12 @@ export default function Edit( { attributes, setAttributes } ) {
         setIsOpen(!isOpen); // Toggle state based on current value
     };
 
-/*      const onChangeDuration = ( newDuration ) => {
-        if (newDuration !== "") {
-            console.log( 'New Duration');
-            console.log( newDuration );
-            const formattedDuration = formatDuration(newDuration); // Function to format hours & minutes
-            // setAttributes( { duration: formattedDuration } );
-            setMeta( { ...meta, duration: formattedDuration } );
-            // setIsOpen(false);
-        }
-    }; */
-
     const onChangeDuration = (newDuration) => {
         if (newDuration !== "") {
             const formattedDuration = formatDuration(newDuration);
             const currentDuration = meta?.duration;
             if (formattedDuration !== currentDuration) {
                 setMeta({ ...meta, duration: formattedDuration });
-                // setIsOpen(false);
             }
         }
     };
@@ -155,6 +143,7 @@ export default function Edit( { attributes, setAttributes } ) {
     };
 
     const onChangeDescription = ( newDescription ) => {
+        setAttributes( { ...attributes, description: newDescription } );
         setMeta( { ...meta, description: newDescription } );
     };
 
@@ -176,7 +165,7 @@ export default function Edit( { attributes, setAttributes } ) {
     return (
         <>
             <InspectorControls key="webinar-inspector">
-                {isLoading ? (
+{/*                 {isLoading ? (
                     <p>{ __('Loading options...', 'st-webinar-management') }</p>
                 ) : (
                     <PanelBody title={ __('Webinar Type', 'st-webinar-management') }>
@@ -187,7 +176,7 @@ export default function Edit( { attributes, setAttributes } ) {
                             onChange={ (newType) => setMeta({ ...meta, webinarType: newType }) }
                         />
                     </PanelBody>
-                )}
+                )} */}
                 <PanelBody title={ __( 'Speakers', 'st-webinar-management' ) }>
                     <SpeakersChecklistControl
                         label={ __( 'Select Speakers', 'st-webinar-management' ) }
@@ -196,15 +185,15 @@ export default function Edit( { attributes, setAttributes } ) {
                         onChange={onChangeSpeakers} // Update speakers using setMeta
                     />
                 </PanelBody>
-                <PanelBody title={ __( 'Thumbnail', 'st-webinar-management' ) }>
+{/*                 <PanelBody title={ __( 'Thumbnail', 'st-webinar-management' ) }>
                     <MediaUpload
-                        onSelect={ ( media ) => setMeta( { ...meta, thumbnail: media.url } ) /* setAttributes( { thumbnail: media.url } ) */ }
+                        onSelect={ ( media ) => setMeta( { ...meta, thumbnail: media.url } ) // setAttributes( { thumbnail: media.url } )  }
                         allowedTypes={ [ 'image/jpeg', 'image/jpg', 'image/png', 'image/svg+xml' ] }
                         render={ ( { open } ) => (
                         <button onClick={ open }>{ thumbnail ? __( 'Replace Thumbnail', 'st-webinar-management' ) : __( 'Set Thumbnail', 'st-webinar-management' ) }</button>
                         ) }
                     />
-                </PanelBody>
+                </PanelBody> */}
             </InspectorControls>
             <div  className="webinar-block-editor">
                 {/* Textboxes for title, subtitle, and other details */}
@@ -308,12 +297,22 @@ export default function Edit( { attributes, setAttributes } ) {
                             onChange={ onChangeStreamingLink }
                         />
                     </div>
-                    <TextareaControl
-                        label={ __( 'Description', 'st-webinar-management' ) }
-                        value={ description }
-                        onChange={ onChangeDescription }
-                        allowedBlocks={ ['core/paragraph'] } // Restrict to paragraph blocks
-					/>
+                    {/* Other controls */}
+                    <div className="webinar-description">
+                        <span className={'field-header'}>  {/* Label with for attribute */}
+                            { __( 'Description', 'st-webinar-management' ) }
+                        </span>
+                        <div>
+                            <RichText
+                                { ...blockProps }
+                                tagName="p"
+                                onChange={ onChangeDescription }
+                                allowedFormats={ [ 'core/bold', 'core/italic' ] }
+                                value={ attributes.description }
+                                placeholder={ __( 'Write your text...' ) }
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

@@ -61,7 +61,6 @@ class ST_Webinar_Management {
 
 		add_action( 'init', array( $this, 'st_register_post_meta' ) );
 
-
 		// add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_webinar_script' ) );
 
 		add_action( 'save_post', array( $this, 'save_webinar_block' ), 10, 2 );
@@ -132,7 +131,6 @@ class ST_Webinar_Management {
 				'template_lock'   => 'all',
 			)
 		);
-
 
 		// Create the custom taxonomy 'webinar_category'.
 		$labels = array(
