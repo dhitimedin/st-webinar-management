@@ -127,7 +127,7 @@ class ST_Webinar_Management {
 					array( 'st-webinar-management/webinar' ),
 					array( 'st-webinar-management/highlight' ),
 				),
-				/* 'template_lock'   => 'all', */
+				'template_lock'   => 'all',
 			)
 		);
 
