@@ -175,14 +175,72 @@ class ST_Webinar_Management {
 	public function st_register_post_meta() {
 		// Registering custom post meta.
 		$custom_fields = array(
-			'subtitle'         => array( 'string', 'wp_kses_post' ),
-			'startDate'        => array( 'string', 'wp_kses_post' ),
-			'endDate'          => array( 'string', 'wp_kses_post' ),
-			'duration'         => array( 'string', 'wp_kses_post' ),
-			'description'      => array( 'string', 'wp_kses_post' ),
-			'registrationForm' => array( 'string', 'esc_url' ),
-			'streamingLink'    => array( 'string', 'esc_url' ),
-			'speakers'         => array( 'array', 'wp_kses_post' ),
+			'subtitle'         => array(
+				'type'              => 'string',
+				'sanitize_callback' => 'wp_kses_post',
+			),
+			'startDate'        => array(
+				'type'              => 'string',
+				'sanitize_callback' => 'wp_kses_post',
+				'show_in_rest'      => true,
+				'single'            => true,
+			),
+			'endDate'          => array(
+				'type'              => 'string',
+				'sanitize_callback' => 'wp_kses_post',
+				'show_in_rest'      => true,
+				'single'            => true,
+			),
+			'duration'         => array(
+				'type'              => 'string',
+				'sanitize_callback' => 'wp_kses_post',
+				'show_in_rest'      => true,
+				'single'            => true,
+			),
+			'description'      => array(
+				'type'              => 'string',
+				'sanitize_callback' => 'wp_kses_post',
+				'show_in_rest'      => true,
+				'single'            => true,
+			),
+			'registrationForm' => array(
+				'type'              => 'string',
+				'sanitize_callback' => 'esc_url',
+				'show_in_rest'      => true,
+				'single'            => true,
+			),
+			'streamingLink'    => array(
+				'type'              => 'string',
+				'sanitize_callback' => 'esc_url',
+				'show_in_rest'      => true,
+				'single'            => true,
+			),
+			'speakers'         => array(
+				'type'              => 'array',
+				'show_in_rest'      => array(
+					'schema' => array(
+						'items' => array(
+							'type' => 'object',
+							'properties' => array(
+								'id' => array(
+									'type' => 'integer', // Assuming speaker ID is an integer
+								),
+								'name' => array(
+									'type' => 'string',
+								),
+								'description' => array(
+									'type' => 'string',
+								),
+								'avatar_urls' => array(
+									'type' => 'object', // Assuming avatar_urls is an object
+								),
+							),
+						),
+					),
+				),
+				'single'            => true,
+				'sanitize_callback' => 'wp_kses_post',
+			),
 /* 			'webinarType'      => array( 'string', 'wp_kses_post' ), */
 		);
 
@@ -190,12 +248,7 @@ class ST_Webinar_Management {
 			register_post_meta(
 				'webinar',
 				$key,
-				array(
-					'show_in_rest'      => true,
-					'single'            => true,
-					'type'              => $value[0],
-					'sanitize_callback' => $value[1],
-				)
+				$value
 			);
 		}
 	}
