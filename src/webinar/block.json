@@ -42,11 +42,22 @@
 		},
 		"speakers": {
 			"type": "array",
+			"source": "query",
+			"query": {
+				"id":{
+					"type": "integer"
+				},
+				"name": {
+					"type": "string"
+				},
+				"description": {
+					"type": "string"
+				},
+				"avatar_urls":{
+					"type": "string"
+				}
+			},
 			"default": []
-		},
-		"webinarType": {
-			"type": "string",
-			"default": null
 		}
 	},
     "script": "file:./js/webinar.min.js",

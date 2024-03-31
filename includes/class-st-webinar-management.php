@@ -64,7 +64,7 @@ class ST_Webinar_Management {
 		add_action( 'save_post', array( $this, 'save_webinar_block' ), 10, 2 );
 
 		// Restrict allowed block type for webinar custom post to paragraph and highlights.
-		add_filter( 'allowed_block_types', array( $this, 'restrict_webinar_blocks' ), 10, 2 );
+		add_filter( 'allowed_block_types_all', array( $this, 'restrict_webinar_blocks' ), 10, 2 );
 	}
 
 
@@ -178,6 +178,8 @@ class ST_Webinar_Management {
 			'subtitle'         => array(
 				'type'              => 'string',
 				'sanitize_callback' => 'wp_kses_post',
+				'show_in_rest'      => true,
+				'single'            => true,
 			),
 			'startDate'        => array(
 				'type'              => 'string',
@@ -222,24 +224,24 @@ class ST_Webinar_Management {
 						'items' => array(
 							'type' => 'object',
 							'properties' => array(
-								'id' => array(
+								'id'          => array(
 									'type' => 'integer', // Assuming speaker ID is an integer
 								),
-								'name' => array(
+								'name'        => array(
 									'type' => 'string',
 								),
 								'description' => array(
 									'type' => 'string',
 								),
 								'avatar_urls' => array(
-									'type' => 'object', // Assuming avatar_urls is an object
+									'type' => 'string', // Assuming avatar_urls is an object.
 								),
 							),
 						),
 					),
 				),
 				'single'            => true,
-				'sanitize_callback' => 'wp_kses_post',
+				'sanitize_callback' => array( $this, 'sanitize_speaker_array' ), // 'wp_kses_post',
 			),
 /* 			'webinarType'      => array( 'string', 'wp_kses_post' ), */
 		);
@@ -253,6 +255,28 @@ class ST_Webinar_Management {
 		}
 	}
 
+	/**
+	 * Array of speakers.
+	 *
+	 * @param array $value Array of values to be stored for a speaker.
+	 * @return array
+	 */
+	public function sanitize_speaker_array( $value ) {
+		// Validate and sanitize individual speaker objects within the array.
+		$sanitized_speakers = array();
+		foreach ( $value as $speaker ) {
+			$sanitized_speaker = array(
+				'id'          => (int) $speaker['id'],
+				'name'        => sanitize_text_field( $speaker['name'] ),
+				'description' => wp_kses_post( $speaker['description'] ),
+				'avatar_urls' => esc_url( $speaker['avatar_urls'] )
+				// Sanitize 'avatar_urls' based on its format.
+			);
+			$sanitized_speakers[] = $sanitized_speaker;
+		}
+		return $sanitized_speakers;
+	}
+
 
 	/**
 	 * Callback method for save_post hook.
@@ -262,7 +286,11 @@ class ST_Webinar_Management {
 	 * @return void
 	 */
 	public function save_webinar_block( $post_id, $post ) {
-		if ( 'block' !== $post->post_type || '[st-webinar-management/webinar]' !== $post->post_content ) {
+		if (
+			'block' !== $post->post_type ||
+			! is_string( $post->post_content ) ||
+			false === strpos( $post->post_content, '[st-webinar-management/webinar]' )
+		) {
 			return;
 		}
 
@@ -284,7 +312,7 @@ class ST_Webinar_Management {
 	 * @return array
 	 */
 	public function restrict_webinar_blocks( $allowed_blocks, $post ) {
-		if ( 'webinar' === $post->post_type ) {
+		if ( ! empty( $post->post_type ) && ( 'webinar' === $post->post_type ) ) {
 			return array(
 				'core/paragraph',
 				'st-webinar-management/webinar',

@@ -34,7 +34,7 @@ export default function Edit( { attributes, setAttributes } ) {
     const startDate = meta[ 'startDate' ];
     const endDate = meta[ 'endDate' ];
     const duration = meta[ 'duration' ];
-    const description = meta[ 'description' ];
+/*     const description = meta[ 'description' ]; */
     const registrationForm = meta[ 'registrationForm' ];
     const streamingLink = meta[ 'streamingLink' ];
     const speakers = meta[ 'speakers' ];
