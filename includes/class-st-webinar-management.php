@@ -53,15 +53,13 @@ class ST_Webinar_Management {
 			include_once ST_WEBINAR_MANAGEMENT_PLUGIN_DIR . '/includes/admin/class-st-webinar-management-admin.php';
 		}
 		*/
-		include_once ST_WEBINAR_MANAGEMENT_PLUGIN_DIR . '/includes/class-st-webinar-highlights.php';
+		// include_once ST_WEBINAR_MANAGEMENT_PLUGIN_DIR . '/includes/class-st-webinar-highlights.php';
 
 		add_action( 'init', array( $this, 'st_webinar_management_init' ) );
 
 		add_action( 'init', array( $this, 'st_register_webinar_blocks' ) );
 
 		add_action( 'init', array( $this, 'st_register_post_meta' ) );
-
-		// add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_webinar_script' ) );
 
 		add_action( 'save_post', array( $this, 'save_webinar_block' ), 10, 2 );
 
@@ -127,8 +125,9 @@ class ST_Webinar_Management {
 				'taxonomies'      => array( 'webinar_type' ), // Assign webinar_type taxonomy.
 				'template'        => array(
 					array( 'st-webinar-management/webinar' ),
+					array( 'st-webinar-management/highlight' ),
 				),
-				'template_lock'   => 'all',
+				/* 'template_lock'   => 'all', */
 			)
 		);
 
@@ -164,6 +163,7 @@ class ST_Webinar_Management {
 	 */
 	public function st_register_webinar_blocks() {
 		register_block_type( ST_WEBINAR_MANAGEMENT_PLUGIN_DIR . '/assets/webinar' );
+		register_block_type( ST_WEBINAR_MANAGEMENT_PLUGIN_DIR . '/assets/highlight' );
 	}
 
 
@@ -202,40 +202,6 @@ class ST_Webinar_Management {
 
 
 	/**
-	 * Enqueues all block scripts.
-	 *
-	 * @return void
-	 */
-	public function enqueue_webinar_script() {
-
-		$asset_file = ST_WEBINAR_MANAGEMENT_PLUGIN_DIR . '/assets/webinar/js/webinar.min.asset.php';
-
-		if ( file_exists( $asset_file ) ) {
-			$asset_data = require $asset_file;
-			$screen     = get_current_screen();
-
-			if ( 'webinar' === $screen->post_type && $screen->is_block_editor ) {
-				wp_enqueue_script(
-					'webinar-block',
-					ST_WEBINAR_MANAGEMENT_PLUGIN_URL . '/assets/webinar/js/webinar.min.js',
-					$asset_data['dependencies'],
-					$asset_data['version'],
-					true
-				);
-
-				// Enqueue the stylesheet from the asset file.
-				wp_enqueue_style(
-					'webinar-block-style',
-					ST_WEBINAR_MANAGEMENT_PLUGIN_URL . '/assets/webinar/css/webinar.min.css',
-					array(),
-					$asset_data['version']
-				);
-			}
-		}
-	}
-
-
-	/**
 	 * Callback method for save_post hook.
 	 *
 	 * @param int     $post_id id of the post.
@@ -251,7 +217,10 @@ class ST_Webinar_Management {
 
 		// Retrieve webinar data using $attributes['webinarId']
 		// Save data to the corresponding webinar post (custom fields)
-		// ... (implement data saving using ACF or custom meta fields)
+		// Example code:.
+		if ( isset( $attributes['highlightRows'] ) && is_array( $attributes['highlightRows'] ) ) {
+			update_post_meta( $post_id, 'highlight_row', $attributes['highlightRows'] );
+		}
 	}
 
 	/**
@@ -263,7 +232,11 @@ class ST_Webinar_Management {
 	 */
 	public function restrict_webinar_blocks( $allowed_blocks, $post ) {
 		if ( 'webinar' === $post->post_type ) {
-			return array( 'core/paragraph', 'st-webinar-management/webinar' );
+			return array(
+				'core/paragraph',
+				'st-webinar-management/webinar',
+				'st-webinar-management/highlight',
+			);
 		}
 		return $allowed_blocks; // Return default blocks for other post types.
 	}

@@ -1,0 +1,16 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 2,
+    "name": "st-webinar-management/highlight",
+    "title": "Webinar Highlight",
+    "category": "common",
+    "icon": "clock",
+    "editorScript": "file:./js/highlight.min.js",
+    "editorStyle": "file:./css/highlight.min.css",
+    "attributes": {
+        "highlightRows": {
+            "type": "array",
+            "default": []
+        }
+    }
+}

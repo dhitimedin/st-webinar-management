@@ -1,5 +1,6 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
 	"name": "st-webinar-management/webinar",
 	"title": "Webinar",
 	"icon": "dashicons-megaphone",
@@ -29,7 +30,9 @@
 			"type": "string"
 		},
 		"description": {
-			"type": "string"
+			"type": "string",
+			"source": "html",
+			"selector": "p"
 		},
 		"registrationForm": {
 			"type": "string"

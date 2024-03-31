@@ -8,7 +8,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin'); // Import the copy-web
 module.exports = {
     ...defaultConfig,
     entry: {
-        'webinar': './src/webinar/js/block-editor-script.jsx'
+        'webinar': './src/webinar/js/block-editor-script.jsx',
+        'highlight': './src/highlight/js/highlight.jsx'
     },
 
     output: {

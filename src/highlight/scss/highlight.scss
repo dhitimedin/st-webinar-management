@@ -1,0 +1,28 @@
+.st-webinar-highlight {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    p {
+        margin: 0;
+        font-weight: normal;
+    }
+    strong {
+        margin-right: 5px;
+    }
+}
+.highlight-row-container{
+    .highlight-row{
+        display: grid;
+        grid-template-columns: 2fr 5fr;
+        column-gap: 1vw;
+        .css-z3c6am-MuiFormControl-root-MuiTextField-root{
+            display: flex;
+            flex-direction: column;
+            label{
+                position: relative;
+                text-transform: uppercase;
+            }
+        }
+    }
+}
