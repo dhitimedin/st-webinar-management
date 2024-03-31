@@ -12,6 +12,8 @@
     }
 }
 .highlight-row-container{
+    width: 80%;
+    margin: auto;
     .highlight-row{
         display: grid;
         grid-template-columns: 2fr 5fr;

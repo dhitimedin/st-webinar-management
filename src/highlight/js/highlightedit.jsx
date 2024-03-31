@@ -66,10 +66,10 @@ export default function HighlightEdit({ attributes, setAttributes }) {
 						</button>
 					</div>
 				))}
+				<button className='add-row-btn' onClick={addHighlightRow}>
+					{__('Add Highlight', 'st-webinar-management')}
+				</button>
 			</div>
-			<button className='add-row-btn' onClick={addHighlightRow}>
-				{__('Add Highlight', 'st-webinar-management')}
-			</button>
 		</>
 	);
 }
