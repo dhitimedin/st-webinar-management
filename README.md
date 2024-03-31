@@ -20,6 +20,10 @@ Streamline webinar management directly from your WordPress site. This plugin pro
 -   **Custom User Role "Speaker":** Grant specific permissions to users designated as "Speakers" for webinars.
 -   **Promotional Block/Pattern:** Design a Gutenberg block or pattern for promoting upcoming webinars within your website, dynamically fetching and displaying the latest information from the corresponding webinar even after modifications.
 -   **Landing Page:** Create a dedicated landing page for each webinar using WordPress templating, showcasing details, speaker information, and a user registration form (with confirmation emails).
+-  **Email Integration:**  Integrate with popular emailing systems like Mailchimp or Mautic to manage webinar registrations.
+-   **Targeted Email Marketing:**  Choose from pre-designed email templates or upload your own to send targeted emails to specific audiences within your mailing list.
+-   **Automated Email Scheduling:**  Schedule reminder emails before the webinar and post-event emails to keep attendees engaged.
+
 
 # Development
 
