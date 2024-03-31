@@ -183,7 +183,7 @@ class ST_Webinar_Management {
 			'registrationForm' => array( 'string', 'esc_url' ),
 			'streamingLink'    => array( 'string', 'esc_url' ),
 			'speakers'         => array( 'array', 'wp_kses_post' ),
-			'webinarType'      => array( 'string', 'wp_kses_post' ),
+/* 			'webinarType'      => array( 'string', 'wp_kses_post' ), */
 		);
 
 		foreach ( $custom_fields as $key => $value ) {

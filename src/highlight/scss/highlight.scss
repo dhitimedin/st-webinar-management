@@ -14,6 +14,9 @@
 .highlight-row-container{
     width: 80%;
     margin: auto;
+    display: flex;
+    flex-direction: column;
+    row-gap: 2vw;
     .highlight-row{
         display: grid;
         grid-template-columns: 2fr 5fr;
@@ -21,9 +24,14 @@
         .css-z3c6am-MuiFormControl-root-MuiTextField-root{
             display: flex;
             flex-direction: column;
+            flex-direction: column;
+            justify-content: space-evenly;
             label{
                 position: relative;
                 text-transform: uppercase;
+                -webkit-transform: none;
+                transform: none;
+                font-size: 11px;
             }
         }
     }

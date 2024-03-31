@@ -38,7 +38,6 @@ export default function Edit( { attributes, setAttributes } ) {
     const registrationForm = meta[ 'registrationForm' ];
     const streamingLink = meta[ 'streamingLink' ];
     const speakers = meta[ 'speakers' ];
-    const webinarType = meta[ 'webinarType' ];
 
     useEffect( () => {
         setMeta( { ...meta, title: postTitle } );
@@ -68,21 +67,6 @@ export default function Edit( { attributes, setAttributes } ) {
         };
     }, [isOpen]);
 
-    useEffect(() => {
-        const fetchOptions = async () => {
-            const terms = await getWebinarTypeOptions();
-            setOptions(terms);
-            setIsLoading(false);
-        };
-
-        fetchOptions();
-    }, []);
-
-    const getWebinarTypeOptions = async () => {
-        const terms = await apiFetch({ path: '/wp/v2/webinar_type' }); // Fetch webinar types using API
-        console.log( terms );
-        return terms.map((term) => ({ label: term.name, value: term.id }));
-    };
 
     const onChangeSubtitle = ( newSubtitle ) => {
         setMeta( { ...meta, subtitle: newSubtitle } );
@@ -165,18 +149,6 @@ export default function Edit( { attributes, setAttributes } ) {
     return (
         <>
             <InspectorControls key="webinar-inspector">
-{/*                 {isLoading ? (
-                    <p>{ __('Loading options...', 'st-webinar-management') }</p>
-                ) : (
-                    <PanelBody title={ __('Webinar Type', 'st-webinar-management') }>
-                        <SelectControl
-                            label={ __('Select Webinar Type', 'st-webinar-management') }
-                            value={ webinarType }
-                            options={ options }
-                            onChange={ (newType) => setMeta({ ...meta, webinarType: newType }) }
-                        />
-                    </PanelBody>
-                )} */}
                 <PanelBody title={ __( 'Speakers', 'st-webinar-management' ) }>
                     <SpeakersChecklistControl
                         label={ __( 'Select Speakers', 'st-webinar-management' ) }
@@ -185,15 +157,6 @@ export default function Edit( { attributes, setAttributes } ) {
                         onChange={onChangeSpeakers} // Update speakers using setMeta
                     />
                 </PanelBody>
-{/*                 <PanelBody title={ __( 'Thumbnail', 'st-webinar-management' ) }>
-                    <MediaUpload
-                        onSelect={ ( media ) => setMeta( { ...meta, thumbnail: media.url } ) // setAttributes( { thumbnail: media.url } )  }
-                        allowedTypes={ [ 'image/jpeg', 'image/jpg', 'image/png', 'image/svg+xml' ] }
-                        render={ ( { open } ) => (
-                        <button onClick={ open }>{ thumbnail ? __( 'Replace Thumbnail', 'st-webinar-management' ) : __( 'Set Thumbnail', 'st-webinar-management' ) }</button>
-                        ) }
-                    />
-                </PanelBody> */}
             </InspectorControls>
             <div  className="webinar-block-editor">
                 {/* Textboxes for title, subtitle, and other details */}
