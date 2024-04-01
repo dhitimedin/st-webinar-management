@@ -53,7 +53,7 @@ class ST_Webinar_Management {
 			include_once ST_WEBINAR_MANAGEMENT_PLUGIN_DIR . '/includes/admin/class-st-webinar-management-admin.php';
 		}
 		*/
-		// include_once ST_WEBINAR_MANAGEMENT_PLUGIN_DIR . '/includes/class-st-webinar-highlights.php';
+		// include_once ST_WEBINAR_MANAGEMENT_PLUGIN_DIR . '/includes/class-st-webinar-highlights.php'; .
 
 		add_action( 'init', array( $this, 'st_webinar_management_init' ) );
 
@@ -61,7 +61,8 @@ class ST_Webinar_Management {
 
 		add_action( 'init', array( $this, 'st_register_post_meta' ) );
 
-		add_action( 'save_post', array( $this, 'save_webinar_block' ), 10, 2 );
+		// Adding custom template for webinar post type.
+		add_filter( 'template_include', array( $this, 'webinar_custom_templates' ), 99 );
 
 		// Restrict allowed block type for webinar custom post to paragraph and highlights.
 		add_filter( 'allowed_block_types_all', array( $this, 'restrict_webinar_blocks' ), 10, 2 );
@@ -225,7 +226,7 @@ class ST_Webinar_Management {
 							'type' => 'object',
 							'properties' => array(
 								'id'          => array(
-									'type' => 'integer', // Assuming speaker ID is an integer
+									'type' => 'integer', // Assuming speaker ID is an integer.
 								),
 								'name'        => array(
 									'type' => 'string',
@@ -243,7 +244,6 @@ class ST_Webinar_Management {
 				'single'            => true,
 				'sanitize_callback' => array( $this, 'sanitize_speaker_array' ), // 'wp_kses_post',
 			),
-/* 			'webinarType'      => array( 'string', 'wp_kses_post' ), */
 		);
 
 		foreach ( $custom_fields as $key => $value ) {
@@ -269,7 +269,7 @@ class ST_Webinar_Management {
 				'id'          => (int) $speaker['id'],
 				'name'        => sanitize_text_field( $speaker['name'] ),
 				'description' => wp_kses_post( $speaker['description'] ),
-				'avatar_urls' => esc_url( $speaker['avatar_urls'] )
+				'avatar_urls' => esc_url( $speaker['avatar_urls'] ),
 				// Sanitize 'avatar_urls' based on its format.
 			);
 			$sanitized_speakers[] = $sanitized_speaker;
@@ -279,29 +279,24 @@ class ST_Webinar_Management {
 
 
 	/**
-	 * Callback method for save_post hook.
+	 * Modifies the template pointer for webinar custom post.
 	 *
-	 * @param int     $post_id id of the post.
-	 * @param WP_Post $post    post data.
-	 * @return void
+	 * @param string $template path of the template that would be used for rendering
+	 *                         the current post.
+	 * @return string
 	 */
-	public function save_webinar_block( $post_id, $post ) {
-		if (
-			'block' !== $post->post_type ||
-			! is_string( $post->post_content ) ||
-			false === strpos( $post->post_content, '[st-webinar-management/webinar]' )
-		) {
-			return;
+	public function webinar_custom_templates( $template ) {
+		global $post;
+
+		if ( ! empty( $post->post_type ) && strcmp( $post->post_type, 'webinar' ) === 0 ) {
+			if ( is_single() ) {
+				$template = ST_WEBINAR_MANAGEMENT_PLUGIN_DIR . '/views/single-webinar.php'; // Replace with your path.
+			} else {
+				$template = ST_WEBINAR_MANAGEMENT_PLUGIN_DIR . '/views/archive-webinar.php'; // Replace with your path.
+			}
 		}
 
-		$attributes = get_block_attributes( $post_id );
-
-		// Retrieve webinar data using $attributes['webinarId']
-		// Save data to the corresponding webinar post (custom fields)
-		// Example code:.
-		if ( isset( $attributes['highlightRows'] ) && is_array( $attributes['highlightRows'] ) ) {
-			update_post_meta( $post_id, 'highlight_row', $attributes['highlightRows'] );
-		}
+		return $template;
 	}
 
 	/**
