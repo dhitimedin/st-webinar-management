@@ -299,6 +299,7 @@ class ST_Webinar_Management {
 		return $template;
 	}
 
+
 	/**
 	 * Restricts Webinar custom post to have only paragraph and highlight blocks.
 	 *
