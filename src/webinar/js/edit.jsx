@@ -282,6 +282,7 @@ const SpeakersChecklistControl = (props) => {
 
     // Use select hook directly within the component body
     const speakersData = useSelect((select) => select('core').getUsers({ roles: 'speaker' }));
+    console.log( speakersData );
 
     useEffect(() => {
         // Fetch speakers inside useEffect

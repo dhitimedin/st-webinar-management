@@ -158,6 +158,25 @@ if ( ! function_exists( 'get_breadcrumb' ) ) {
 	</div>
 	<!-- Program Highlights -->
 	<!-- Speakers -->
+	<div class="st-speakers-container">
+		<?php $speakers = get_post_meta( get_the_ID(), 'speakers', true ); ?>
+		<?php if ( ! empty( $speakers ) ) : ?>
+			<?php foreach ( $speakers as $speaker ) : ?>
+				<div class="st-speaker">
+					<div class="st-speaker-avatar">
+						<?php $avatars = array_values( json_decode( $speaker['avatar_urls'], true ) ); ?>
+						<img src="<?php echo esc_url_raw( $avatars[ count( $avatars ) - 1 ] ); ?>" />
+					</div>
+					<div class="st-speaker-name">
+						<?php echo esc_html( $speaker['name'] ); ?>
+					</div>
+					<div class="st-speaker-description">
+						<?php echo esc_html( $speaker['description'] ); ?>
+					</div>
+				</div>
+			<?php endforeach; ?>
+		<?php endif; ?>
+	</div>
 	<!-- Speakers -->
 
 	<footer class="entry-footer default-max-width">
