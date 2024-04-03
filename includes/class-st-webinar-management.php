@@ -223,7 +223,7 @@ class ST_Webinar_Management {
 				'show_in_rest'      => array(
 					'schema' => array(
 						'items' => array(
-							'type' => 'object',
+							'type'       => 'object',
 							'properties' => array(
 								'id'          => array(
 									'type' => 'integer', // Assuming speaker ID is an integer.
@@ -243,6 +243,26 @@ class ST_Webinar_Management {
 				),
 				'single'            => true,
 				'sanitize_callback' => array( $this, 'sanitize_speaker_array' ), // 'wp_kses_post',
+			),
+			'highlightRows'    => array(
+				'type'              => 'array',
+				'show_in_rest'      => array(
+					'schema' => array(
+						'items' => array(
+							'type' => 'object',
+							'properties' => array(
+								'highlightTime'        => array(
+									'type' => 'string', // Assuming speaker ID is an integer.
+								),
+								'highlightDescription' => array(
+									'type' => 'string',
+								),
+							),
+						),
+					),
+				),
+				'single'            => true,
+				'sanitize_callback' => array( $this, 'sanitize_highlight_array' ), // 'wp_kses_post',
 			),
 		);
 
@@ -269,12 +289,32 @@ class ST_Webinar_Management {
 				'id'          => (int) $speaker['id'],
 				'name'        => sanitize_text_field( $speaker['name'] ),
 				'description' => wp_kses_post( $speaker['description'] ),
-				'avatar_urls' => esc_url( $speaker['avatar_urls'] ),
+				'avatar_urls' => wp_kses_post( $speaker['avatar_urls'] ),
 				// Sanitize 'avatar_urls' based on its format.
 			);
 			$sanitized_speakers[] = $sanitized_speaker;
 		}
 		return $sanitized_speakers;
+	}
+
+	/**
+	 * Array of highlights.
+	 *
+	 * @param array $value Array of values to be stored for a highlights.
+	 * @return array
+	 */
+	public function sanitize_highlight_array( $value ) {
+		// Validate and sanitize individual speaker objects within the array.
+		$sanitized_highlights = array();
+		foreach ( $value as $highlights ) {
+			$sanitized_highlights = array(
+				'highlightTime'        => wp_kses_post( $highlights['highlightTime'] ),
+				'highlightDescription' => wp_kses_post( $highlights['highlightDescription'] ),
+				// Sanitize 'avatar_urls' based on its format.
+			);
+			$sanitized_highlights[] = $sanitized_highlights;
+		}
+		return $sanitized_highlights;
 	}
 
 

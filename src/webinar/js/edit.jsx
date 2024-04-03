@@ -1,11 +1,9 @@
 import { useState, useEffect, useRef } from '@wordpress/element';
-import { InspectorControls, useBlockProps, InnerBlocks, RichText } from '@wordpress/block-editor';
-import { PanelBody, TextControl, TextareaControl, DateTimePicker, SelectControl, BaseControl, CheckboxControl } from '@wordpress/components';
+import { InspectorControls, useBlockProps, RichText } from '@wordpress/block-editor';
+import { PanelBody, TextControl, DateTimePicker, BaseControl, CheckboxControl } from '@wordpress/components';
 import DurationPicker from 'react-duration-picker';
-import {MediaUpload} from '@wordpress/block-editor';
 import { useSelect } from '@wordpress/data';
 import { useEntityProp } from '@wordpress/core-data';
-import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
 
 export default function Edit( { attributes, setAttributes } ) {
@@ -15,9 +13,6 @@ export default function Edit( { attributes, setAttributes } ) {
     const [isOpen, setIsOpen] = useState(false);
     const [isStartDatePickerOpen, setIsStartDatePickerOpen] = useState(false);
     const [isEndDatePickerOpen, setIsEndDatePickerOpen] = useState(false);
-    // Inside the `edit` function:
-    const [isLoading, setIsLoading] = useState(true);
-    const [options, setOptions] = useState([]);
 
     const blockProps = useBlockProps();
 
@@ -152,7 +147,7 @@ export default function Edit( { attributes, setAttributes } ) {
                 <PanelBody title={ __( 'Speakers', 'st-webinar-management' ) }>
                     <SpeakersChecklistControl
                         label={ __( 'Select Speakers', 'st-webinar-management' ) }
-                        speakers= {attributes.speakers}
+                        speakers= {speakers}
                         setMeta={setMeta}
                         onChange={onChangeSpeakers} // Update speakers using setMeta
                     />
@@ -225,9 +220,7 @@ export default function Edit( { attributes, setAttributes } ) {
                                 value={ duration }
                                 onChange={ (value) => {
                                     // Validate duration if entered manually
-                                    console.log( value );
                                     if (validateDuration(value)) {
-                                        console.log( 'validate' );
                                         setAttributes({ duration: value });
                                     }
                                 }}
@@ -297,7 +290,7 @@ const SpeakersChecklistControl = (props) => {
                 id: speaker.id,
                 name: speaker.name,
                 description: speaker.description,
-                avatar_urls: speaker.avatar_urls,
+                avatar_urls: JSON.stringify( speaker.avatar_urls ),
             })) : [];
             setSpeakerLists(speakers);
             setIsLoading(false);

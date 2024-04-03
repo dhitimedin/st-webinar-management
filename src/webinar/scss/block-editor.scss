@@ -1,6 +1,8 @@
 body {
 	.entry-header{
 		&.alignwide{
+			margin: 0;
+			padding: 0;
 			.st-webinar-breadcrumb{
 				display: flex;
 				flex-direction: row;

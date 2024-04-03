@@ -4,11 +4,18 @@ import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { useState, useEffect } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
+import { useEntityProp } from '@wordpress/core-data';
 import { __ } from '@wordpress/i18n';
 
 export default function HighlightEdit({ attributes, setAttributes }) {
 
     const { highlightRows } = attributes;
+    const postType = useSelect(
+        ( select ) => select( 'core/editor' ).getCurrentPostType(),
+        []
+    );
+    const [ meta, setMeta ] = useEntityProp( 'postType', postType, 'meta' );
 
 	// State management for dynamic rows
 	const [rows, setRows] = useState(
@@ -22,6 +29,7 @@ export default function HighlightEdit({ attributes, setAttributes }) {
     useEffect(() => {
         // Update the block attributes when the rows change
         setAttributes({ highlightRows: rows });
+		setMeta({ ...meta, highlightRows: rows });
     }, [rows]);
 
 

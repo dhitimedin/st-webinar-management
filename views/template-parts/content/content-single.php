@@ -19,7 +19,7 @@ if ( ! function_exists( 'get_breadcrumb' ) ) {
 
 		$kses_defaults = wp_kses_allowed_html( 'post' );
 
-		$svg_args = array(
+		$svg_args     = array(
 			'svg'   => array(
 				'class'           => true,
 				'aria-hidden'     => true,
@@ -29,7 +29,7 @@ if ( ! function_exists( 'get_breadcrumb' ) ) {
 				'width'           => true,
 				'height'          => true,
 				'fill'            => true,
-				'viewbox'         => true // <= Must be lower case!
+				'viewbox'         => true, // <= Must be lower case!
 			),
 			'g'     => array( 'fill' => true ),
 			'title' => array( 'title' => true ),
@@ -100,13 +100,33 @@ if ( ! function_exists( 'get_breadcrumb' ) ) {
 			<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
 		</div>
 		<h2><?php echo esc_html( get_post_meta( get_the_ID(), 'subtitle', true ) ); ?></h2>
-		<figure class="post-thumbnail">
-			<img src="<?php echo esc_url_raw( get_the_post_thumbnail_url( get_the_ID() ) ); ?>" class="st-webinar-banner" />
-		</figure>
-		<?php // twenty_twenty_one_post_thumbnail(); ?>
 	</header><!-- .entry-header -->
 
 	<div class="entry-content">
+		<div class="st-program-info-container">
+			<div class="st-day-container">
+				<span><?php esc_html_e( 'Day', 'st-webinar-management' ); ?></span>
+				<span>
+					<?php esc_html_e( 'Fourth-fair', 'st-webinar-management' ); ?>
+					<?php echo esc_attr( gmdate( 'd F', $start_date ) ); ?>
+				</span>
+			</div>
+			<div  class="st-schedule-container">
+				<span><?php esc_html_e( 'Schedule', 'st-webinar-management' ); ?></span>
+				<span>
+					<?php echo esc_attr( gmdate( 'H, eO', $start_date ) ); ?>
+				</span>
+			</div>
+			<div  class="st-duration-container">
+				<span><?php esc_html_e( 'Duration', 'st-webinar-management' ); ?></span>
+				<span>
+					<?php $start_date = strtotime( get_post_meta( get_the_ID(), 'duration', true ) ); ?>
+				</span>
+			</div>
+		</div>
+		<figure class="post-thumbnail">
+			<img src="<?php echo esc_url_raw( get_the_post_thumbnail_url( get_the_ID() ) ); ?>" class="st-webinar-banner" />
+		</figure>
 		<?php
 		the_content();
 
@@ -120,6 +140,9 @@ if ( ! function_exists( 'get_breadcrumb' ) ) {
 		);
 		?>
 	</div><!-- .entry-content -->
+	<div class="st-highlight-content">
+		<?php echo var_dump( get_post_meta( get_the_ID(), 'highlightRows', true ) ); ?>
+	</div>
 
 	<footer class="entry-footer default-max-width">
 		<?php twenty_twenty_one_entry_meta_footer(); ?>

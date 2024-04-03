@@ -10,6 +10,15 @@
     "attributes": {
         "highlightRows": {
             "type": "array",
+			"source": "query",
+			"query": {
+				"highlightTime":{
+					"type": "string"
+				},
+				"highlightDescription": {
+					"type": "string"
+				}
+			},
             "default": []
         }
     }
