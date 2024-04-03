@@ -45,7 +45,7 @@ export default function HighlightEdit({ attributes, setAttributes }) {
 	};
 
 	const updateHighlightRow = (rowIndex, updatedData) => {
-		const updatedRows = [...rows];
+		const updatedRows = [...rows ];
 		updatedRows[rowIndex] = updatedData;
 		setRows(updatedRows);
 	};

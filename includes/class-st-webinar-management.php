@@ -307,12 +307,12 @@ class ST_Webinar_Management {
 		// Validate and sanitize individual speaker objects within the array.
 		$sanitized_highlights = array();
 		foreach ( $value as $highlights ) {
-			$sanitized_highlights = array(
+			$sanitized_highlight = array(
 				'highlightTime'        => wp_kses_post( $highlights['highlightTime'] ),
 				'highlightDescription' => wp_kses_post( $highlights['highlightDescription'] ),
 				// Sanitize 'avatar_urls' based on its format.
 			);
-			$sanitized_highlights[] = $sanitized_highlights;
+			$sanitized_highlights[] = $sanitized_highlight;
 		}
 		return $sanitized_highlights;
 	}

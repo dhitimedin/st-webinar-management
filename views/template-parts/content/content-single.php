@@ -140,9 +140,25 @@ if ( ! function_exists( 'get_breadcrumb' ) ) {
 		);
 		?>
 	</div><!-- .entry-content -->
+	<!-- Program Highlights -->
 	<div class="st-highlight-content">
-		<?php echo var_dump( get_post_meta( get_the_ID(), 'highlightRows', true ) ); ?>
+		<?php $highlights = get_post_meta( get_the_ID(), 'highlightRows', true ); ?>
+		<?php if ( ! empty( $highlights ) ) : ?>
+			<?php foreach ( $highlights as $highlight ) : ?>
+				<div class="st-highlight">
+					<div class="st-highlight-time">
+						<?php echo esc_attr( gmdate( 'H:i', strtotime( $highlight['highlightTime'] ) ) ); ?>
+					</div>
+					<div class="st-highlight-description">
+						<?php echo esc_html( $highlight['highlightDescription'] ); ?>
+					</div>
+				</div>
+			<?php endforeach; ?>
+		<?php endif; ?>
 	</div>
+	<!-- Program Highlights -->
+	<!-- Speakers -->
+	<!-- Speakers -->
 
 	<footer class="entry-footer default-max-width">
 		<?php twenty_twenty_one_entry_meta_footer(); ?>
