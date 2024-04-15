@@ -150,24 +150,35 @@ if ( ! function_exists( 'get_breadcrumb' ) ) {
 			<img src="<?php echo esc_url_raw( get_the_post_thumbnail_url( get_the_ID() ) ); ?>" class="st-webinar-banner" />
 		</figure>
 		<div id="wp-block-st-webinar-management-webinar" class="wp-block-st-webinar-management-webinar">
-		<?php
-		echo wp_kses_post( get_the_content() );
+			<header class="st-webinar-section-header">
+				<h2 class="st-webinar-section-title"><?php esc_html_e( 'Webinar Details', 'st-webinar-management' ); ?></h2>
+				<div class="st-color-bar-h2"></div>
+			</header>
 
-		// wp_link_pages(
-		// 	array(
-		// 		'before'   => '<nav class="page-links" aria-label="' . esc_attr__( 'Page', 'twentytwentyone' ) . '">',
-		// 		'after'    => '</nav>',
-		// 		/* translators: %: Page number. */
-		// 		'pagelink' => esc_html__( 'Page %', 'twentytwentyone' ),
-		// 	)
-		// );
-		?>
+			<?php
+			echo wp_kses_post( get_the_content() );
+
+			// wp_link_pages(
+			// array(
+			// 'before'   => '<nav class="page-links" aria-label="' . esc_attr__( 'Page', 'twentytwentyone' ) . '">',
+			// 'after'    => '</nav>',
+			// * translators: %: Page number. */
+			// 'pagelink' => esc_html__( 'Page %', 'twentytwentyone' ),
+			// )
+			// );
+			?>
 		</div>
 	</div><!-- .entry-content -->
 	<!-- Program Highlights -->
 	<div class="st-highlight-content">
 		<?php $highlights = get_post_meta( get_the_ID(), 'highlightRows', true ); ?>
 		<?php if ( ! empty( $highlights ) ) : ?>
+			<!-- section-header -->
+			<header class="st-webinar-section-header">
+				<h2 class="st-webinar-section-title"><?php esc_html_e( 'Program', 'st-webinar-management' ); ?></h2>
+				<div class="st-color-bar-h2"></div>
+			</header>
+			<!-- section-header -->
 			<?php foreach ( $highlights as $highlight ) : ?>
 				<div class="st-highlight">
 					<div class="st-highlight-time">
@@ -185,20 +196,37 @@ if ( ! function_exists( 'get_breadcrumb' ) ) {
 	<div class="st-speakers-container">
 		<?php $speakers = get_post_meta( get_the_ID(), 'speakers', true ); ?>
 		<?php if ( ! empty( $speakers ) ) : ?>
-			<?php foreach ( $speakers as $speaker ) : ?>
-				<div class="st-speaker">
-					<div class="st-speaker-avatar">
-						<?php $avatars = array_values( json_decode( $speaker['avatar_urls'], true ) ); ?>
-						<img src="<?php echo esc_url_raw( $avatars[ count( $avatars ) - 1 ] ); ?>" />
-					</div>
-					<div class="st-speaker-name">
-						<?php echo esc_html( $speaker['name'] ); ?>
-					</div>
-					<div class="st-speaker-description">
-						<?php echo esc_html( $speaker['description'] ); ?>
-					</div>
-				</div>
-			<?php endforeach; ?>
+			<!-- section-header -->
+			<header class="st-webinar-section-header">
+				<h2 class="st-webinar-section-title"><?php esc_html_e( 'Speakers', 'st-webinar-management' ); ?></h2>
+				<div class="st-color-bar-h2"></div>
+			</header>
+			<!-- section-header -->
+			<!-- Speaker Section Content -->
+			<div class="st-speaker-grid-container">
+				<?php foreach ( $speakers as $speaker ) : ?>
+					<?php $avatars = array_values( json_decode( $speaker['avatar_urls'], true ) ); ?>
+					<figure class="st-speaker-card">
+						<img class="st-speaker-image" src="<?php echo esc_url_raw( $avatars[ count( $avatars ) - 1 ] ); ?>" alt="<?php echo esc_html( $post->title ); ?>" />
+						<p>
+							<figcaption class="st-speaker-name"><?php echo esc_html( $speaker['name'] ); ?></figcaption>
+							<figcaption class="st-speaker-details"><?php echo esc_html( $speaker['description'] ); ?></figcaption>
+						<p>
+					</figure>
+<!-- 					<div class="st-speaker">
+						<div class="st-speaker-avatar">
+							<?php $avatars = array_values( json_decode( $speaker['avatar_urls'], true ) ); ?>
+							<img src="<?php echo esc_url_raw( $avatars[ count( $avatars ) - 1 ] ); ?>" />
+						</div>
+						<div class="st-speaker-name">
+							<?php echo esc_html( $speaker['name'] ); ?>
+						</div>
+						<div class="st-speaker-description">
+							<?php echo esc_html( $speaker['description'] ); ?>
+						</div>
+					</div> -->
+				<?php endforeach; ?>
+			</div>
 		<?php endif; ?>
 	</div>
 	<!-- Speakers -->
