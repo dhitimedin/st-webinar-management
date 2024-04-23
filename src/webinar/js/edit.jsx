@@ -327,4 +327,3 @@ const SpeakersChecklistControl = (props) => {
         </BaseControl>
     );
 };
-
