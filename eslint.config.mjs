@@ -4,7 +4,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
 import pluginJs from "@eslint/js";
-import importPlugin from 'eslint-plugin-import'
 
 // mimic CommonJS variables -- not needed if using CommonJS
 const __filename = fileURLToPath(import.meta.url);
@@ -29,7 +28,7 @@ export default [
       "react/jsx-indent-props": [2, "tab"],
     },
     settings: {
-      'import/ignore': ['node_modules/react-native/index\\.jsx$']
+      'import/ignore': ['node_modules/react-native/index\\.jsx$'],
     }
   },
 ];

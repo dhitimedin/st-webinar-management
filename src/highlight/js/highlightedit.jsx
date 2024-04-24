@@ -20,8 +20,11 @@ export default function HighlightEdit({ attributes, setAttributes }) {
 	const [rows, setRows] = useState(
 		highlightRows
 		|| [
-			{ highlightTime: dayjs() },
-			{ highlightDescription: '' },
+			{
+				index: 0,
+				highlightTime: dayjs(),
+				highlightDescription: '',
+			},
 		],
 	);
 
@@ -32,30 +35,33 @@ export default function HighlightEdit({ attributes, setAttributes }) {
 	}, [rows]);
 
 	const addHighlightRow = () => {
-		setRows([...rows, { highlightTime: dayjs(), highlightDescription: '' }]);
+		setRows([...rows, { index: rows.length, highlightTime: dayjs(), highlightDescription: '' }]);
 		// setAttributes({ highlightRows: rows });
 	};
 
 	const removeHighlightRow = (index) => {
-		const updatedRows = [...rows];
-		updatedRows.splice(index, 1);
+		const updatedRows = rows.filter((row) => row.index !== index);
 		setRows(updatedRows);
 	};
 
 	const updateHighlightRow = (rowIndex, updatedData) => {
-		const updatedRows = [...rows];
-		updatedRows[rowIndex] = updatedData;
+		const updatedRows = rows.map((row) => {
+			if (row.index === rowIndex) {
+				return { ...row, ...updatedData };
+			}
+			return row;
+		});
 		setRows(updatedRows);
 	};
 
 	return (
 		<div className="highlight-row-container">
 			{rows.map((row, index) => (
-				<div key={index} className="highlight-row">
+				<div key={row.index} className="highlight-row">
 					<LocalizationProvider dateAdapter={AdapterDayjs}>
 						<TimePicker
 							ampm={false}
-							closeOnSelect={true}
+							closeOnSelect
 							label={__('Basic time picker', 'st-webinar-management')}
 							value={dayjs(row.highlightTime) || dayjs()}
 							onChange={
@@ -73,12 +79,12 @@ export default function HighlightEdit({ attributes, setAttributes }) {
 							)
 						}
 					/>
-					<button className="remove-row-btn" onClick={() => removeHighlightRow(index)}>
+					<button type="button" className="remove-row-btn" onClick={() => removeHighlightRow(index)}>
 						{ __('Remove', 'st-webinar-management') }
 					</button>
 				</div>
 			))}
-			<button className="add-row-btn" onClick={addHighlightRow}>
+			<button type="button" className="add-row-btn" onClick={addHighlightRow}>
 				{ __('Add Highlight', 'st-webinar-management') }
 			</button>
 		</div>
