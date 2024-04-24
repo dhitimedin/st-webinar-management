@@ -15,7 +15,14 @@ export default [
   {
     files: ["src/**/*.jsx"],
     languageOptions: {
-      globals: globals.browser
+      globals: globals.browser,
+      parserOptions: {
+        "ecmaVersion": 2020,
+        "ecmaFeatures": {
+          "jsx": true
+        },
+        "sourceType": "module"
+      },
     },
     rules: {
       semi: "error",
@@ -26,9 +33,10 @@ export default [
       "react/prop-types": 0,
       "react/jsx-indent": [2, "tab"],
       "react/jsx-indent-props": [2, "tab"],
+      "no-unsafe-optional-chaining": "error",
     },
     settings: {
       'import/ignore': ['node_modules/react-native/index\\.jsx$'],
-    }
+    },
   },
 ];

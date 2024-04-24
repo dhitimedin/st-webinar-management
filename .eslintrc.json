@@ -23,7 +23,7 @@
         "plugin:eslint-plugin-import"
     ],
     "parserOptions": {
-        "ecmaVersion": 12,
+        "ecmaVersion": 2020,
         "ecmaFeatures": {
           "jsx": true
         },
