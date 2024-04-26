@@ -287,11 +287,10 @@ export default function Edit({ attributes, setAttributes }) {
 const SpeakersChecklistControl = (props) => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [speakerLists, setSpeakerLists] = useState([]);
+	const { label, onChange, speakers } = props;
 
 	// Use select hook directly within the component body
 	const registeredSpeakers = useSelect((select) => select('core').getUsers({ roles: 'speaker' }));
-
-	const { label, onChange, speakers } = props;
 
 	useEffect(() => {
 		// Fetch speakers inside useEffect
