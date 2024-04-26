@@ -232,43 +232,34 @@ body {
 	/* Styles for the block editor wrapper */
 	width: 80%;
     margin: auto;
-	.webinar-date-time-duration-container {
+	.webinar-date-time-diuration-container {
 		display: flex;
-		flex-direction: column;
-		position: relative;
-		.webinar-label {
-			font-size: 11px;
-			font-weight: 500;
-			line-height: 1.4;
-			text-transform: uppercase;
-			display: inline-block;
-			margin-bottom: calc(8px);
-			padding: 0px;
-		}
-		.webinar-date-time-picker {
-			position: absolute; /* Position the picker absolutely */
-			top: calc(100% + 5px); /* Position below the input field */
-			left: 0;
-			background-color: #fff; /* Set background color */
-			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Add a slight shadow */
-			padding: 10px; /* Add some padding */
-			z-index: 10; /* Ensure the picker has higher stacking order */
-			/* display: none;  *//* Initially hide the picker */
+		justify-content: space-between;
+		align-items: center;
+		.webinar-date-time-container{
+			display: flex;
+			flex-direction: column;
+			position: relative;
+			.MuiFormControl-root.MuiTextField-root.css-z3c6am-MuiFormControl-root-MuiTextField-root {
+				margin-bottom: calc(8px);
+				.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root {
+					transform: unset;
+					position: relative;
+					font-size: 11px;
+					font-weight: 500;
+					line-height: 1.4;
+					text-transform: uppercase;
+					display: inline-block;
+					margin-bottom: calc(8px);
+					padding: 0px;
+				}
+			}
 		}
 	}
-
-
-
-
 
 	.webinar-block-editor input[type="text"] {
 		/* Style the input field */
 		cursor: pointer; /* Set cursor to pointer on hover */
-	}
-
-	.webinar-block-editor .webinar-date-time-picker.active {
-		/* Show the picker when the state is open */
-		display: block;
 	}
 
 	.duration-picker-modal {

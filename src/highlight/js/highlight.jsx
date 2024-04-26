@@ -16,5 +16,5 @@ registerBlockType(metadata.name, {
 		},
 	},
 	edit: HighlightEdit,
-	save: ({ attributes }) => null,
+	save: () => null,
 });

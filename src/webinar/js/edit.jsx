@@ -1,36 +1,31 @@
 import React from 'react';
+import { useEntityProp } from '@wordpress/core-data';
+import { useSelect } from '@wordpress/data';
 import { useState, useEffect, useRef } from '@wordpress/element';
 import { InspectorControls, RichText } from '@wordpress/block-editor';
 import {
 	PanelBody,
 	TextControl,
-	DateTimePicker,
 	BaseControl,
 	CheckboxControl,
 } from '@wordpress/components';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 import DurationPicker from 'react-duration-picker';
-import { useSelect } from '@wordpress/data';
-import { useEntityProp } from '@wordpress/core-data';
 import { __ } from '@wordpress/i18n';
 
 export default function Edit({ attributes, setAttributes }) {
 	const postTitle = useSelect(
-		(select) => select('core/editor').getCurrentPost().title,
+		(select) => select('core/editor').getEditedPostAttribute('title'),
 		[],
 	);
-
-	const modalRef = useRef(null);
-	const [isOpen, setIsOpen] = useState(false);
-	const [isStartDatePickerOpen, setIsStartDatePickerOpen] = useState(false);
-	const [isEndDatePickerOpen, setIsEndDatePickerOpen] = useState(false);
-
 	const postType = useSelect(
 		(select) => select('core/editor').getCurrentPostType(),
 		[],
 	);
-
 	const [meta, setMeta] = useEntityProp('postType', postType, 'meta');
-
 	const {
 		subtitle,
 		startDate,
@@ -40,6 +35,10 @@ export default function Edit({ attributes, setAttributes }) {
 		streamingLink,
 		speakers,
 	} = meta;
+
+	const modalRef = useRef(null);
+	const [isOpen, setIsOpen] = useState(false);
+	const [timeCheck, setTimeCheck] = useState(startDate);
 
 	useEffect(() => {
 		setMeta({ ...meta, title: postTitle });
@@ -73,27 +72,13 @@ export default function Edit({ attributes, setAttributes }) {
 		setMeta({ ...meta, subtitle: newSubtitle });
 	};
 
-	const onOpenStartDatePicker = () => {
-		setIsStartDatePickerOpen(true);
-	};
-
-	const onOpenEndDatePicker = () => {
-		setIsEndDatePickerOpen(true);
-	};
-
-	const onCloseDatePicker = () => {
-		setIsStartDatePickerOpen(false);
-		setIsEndDatePickerOpen(false);
-	};
-
 	const onChangeStartDate = (newStartDate) => {
 		setMeta({ ...meta, startDate: newStartDate });
-		onCloseDatePicker();
+		setTimeCheck(newStartDate.toString());
 	};
 
 	const onChangeEndDate = (newEndDate) => {
 		setMeta({ ...meta, endDate: newEndDate });
-		onCloseDatePicker();
 	};
 
 	const validateDuration = (newDuration) => {
@@ -168,60 +153,26 @@ export default function Edit({ attributes, setAttributes }) {
 						value={subtitle}
 						onChange={onChangeSubtitle}
 					/>
-					<div style={{ display: 'flex', justifyContent: 'space-between' }}>
-						<div className="webinar-date-time-duration-container">
-							{/* Label with for attribute */}
-							<label className="webinar-label" htmlFor="startDateInput">
-								{__('Begins at', 'st-webinar-management')}
-							</label>
-							<input
-								type="text"
-								id="startDateInput"
-								placeholder={__('Start Date & Time', 'st-webinar-management')}
-								onFocus={onOpenStartDatePicker}
-								value={startDate}
-								readOnly // Disable text input
-								onClick={(event) => {
-									event.stopPropagation(); // Prevent click from bubbling up
-									setIsStartDatePickerOpen(true);
-								}}
-							/>
-							{isStartDatePickerOpen && (
-								<div className="webinar-date-time-picker">
-									<DateTimePicker
-										currentDate={startDate}
-										onChange={onChangeStartDate}
-										onClose={onCloseDatePicker}
-									/>
-								</div>
-							)}
+					<div className="webinar-date-time-diuration-container">
+						<div className="webinar-date-time-container">
+							<LocalizationProvider dateAdapter={AdapterDayjs}>
+								<DateTimePicker
+									label={__('Begins at', 'st-webinar-management')}
+									value={startDate ? dayjs(startDate) : null}
+									onChange={onChangeStartDate}
+								/>
+							</LocalizationProvider>
 						</div>
-						<div className="webinar-date-time-duration-container">
-							{/* Label with for attribute */}
-							<label className="webinar-label" htmlFor="endDateInput">
-								{__('Ends at', 'st-webinar-management')}
-							</label>
-							<input
-								type="text"
-								id="endDateInput"
-								placeholder={__('End Date & Times', 'st-webinar-management')}
-								onFocus={onOpenEndDatePicker}
-								value={endDate}
-								readOnly // Disable text input
-								onClick={(event) => {
-									event.stopPropagation(); // Prevent click from bubbling up
-									setIsEndDatePickerOpen(true);
-								}}
-							/>
-							{isEndDatePickerOpen && (
-								<div className="webinar-date-time-picker">
-									<DateTimePicker
-										currentDate={endDate}
-										onChange={onChangeEndDate}
-										onClose={onCloseDatePicker}
-									/>
-								</div>
-							)}
+						<div className="webinar-date-time-container">
+							<LocalizationProvider dateAdapter={AdapterDayjs}>
+								<DateTimePicker
+									label={__('Ends at', 'st-webinar-management')}
+									value={endDate ? dayjs(endDate) : null}
+									onChange={onChangeEndDate}
+									minTime={timeCheck ? dayjs(timeCheck) : null}
+									minDate={timeCheck ? dayjs(timeCheck) : null}
+								/>
+							</LocalizationProvider>
 						</div>
 						<div style={{ display: 'flex', position: 'relative' }}>
 							<TextControl
@@ -234,10 +185,9 @@ export default function Edit({ attributes, setAttributes }) {
 									}
 								}}
 								onClick={(event) => {
-									event.stopPropagation(); // Prevent click from bubbling up
+									event.stopPropagation();
 									toggleModal();
-								}} // Open modal on click
-								// readOnly // Disable text input
+								}}
 							/>
 							<div ref={modalRef} className={`duration-picker-modal ${isOpen ? 'active' : ''}`} onClick={(e) => e.stopPropagation()}>
 								{isOpen && (

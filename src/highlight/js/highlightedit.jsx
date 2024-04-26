@@ -56,7 +56,7 @@ export default function HighlightEdit({ attributes, setAttributes }) {
 
 	return (
 		<div className="highlight-row-container">
-			{rows.map((row, index) => (
+			{rows.map((row) => (
 				<div key={row.index} className="highlight-row">
 					<LocalizationProvider dateAdapter={AdapterDayjs}>
 						<TimePicker
