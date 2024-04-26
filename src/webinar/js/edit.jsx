@@ -13,7 +13,6 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import DurationPicker from 'react-duration-picker';
 import { __ } from '@wordpress/i18n';
 
 export default function Edit({ attributes, setAttributes }) {
@@ -39,6 +38,8 @@ export default function Edit({ attributes, setAttributes }) {
 	const modalRef = useRef(null);
 	const [isOpen, setIsOpen] = useState(false);
 	const [timeCheck, setTimeCheck] = useState(startDate);
+	const [isStartDateSelected, setIsStartDateSelected] = useState(false);
+	const [selectedDuration, setSelectedDuration] = useState(duration);
 
 	useEffect(() => {
 		setMeta({ ...meta, title: postTitle });
@@ -75,19 +76,32 @@ export default function Edit({ attributes, setAttributes }) {
 	const onChangeStartDate = (newStartDate) => {
 		setMeta({ ...meta, startDate: newStartDate });
 		setTimeCheck(newStartDate.toString());
+		setIsStartDateSelected(true); // Enable endDate when startDate is selected
 	};
 
 	const onChangeEndDate = (newEndDate) => {
-		setMeta({ ...meta, endDate: newEndDate });
+		// Check if startDate is defined and greater than newEndDate
+		if (startDate && dayjs(startDate).isBefore(newEndDate, 'minute')) {
+			// Calculate duration in hours and minutes
+			const durationHours = dayjs(newEndDate).diff(startDate, 'hours');
+			const durationMinutes = dayjs(newEndDate).diff(startDate, 'minutes') % 60;
+			const calculatedDuration = `${durationHours} hour${durationHours !== 1 ? 's' : ''} ${durationMinutes} minute${durationMinutes !== 1 ? 's' : ''}`;
+			// Update duration with calculated values
+			setMeta({
+				...meta,
+				endDate: newEndDate,
+				duration: calculatedDuration,
+			});
+			setSelectedDuration(calculatedDuration);
+		} else {
+			setMeta({ ...meta, endDate: newEndDate });
+		}
+		// setMeta({ ...meta, endDate: newEndDate });
 	};
 
 	const validateDuration = (newDuration) => {
 		const regex = /^(\d+ )?(hours?|hrs?) ?(\d+ )?(mins?|min(?:utes)?)?$/i;
 		return regex.test(newDuration);
-	};
-
-	const toggleModal = () => {
-		setIsOpen(!isOpen); // Toggle state based on current value
 	};
 
 	const formatDuration = (newDuration) => {
@@ -101,16 +115,6 @@ export default function Edit({ attributes, setAttributes }) {
 			formattedDuration += `${minutes} minute${minutes !== 1 ? 's' : ''}`;
 		}
 		return formattedDuration;
-	};
-
-	const onChangeDuration = (newDuration) => {
-		if (newDuration !== '') {
-			const formattedDuration = formatDuration(newDuration);
-			const currentDuration = meta?.duration;
-			if (formattedDuration !== currentDuration) {
-				setMeta({ ...meta, duration: formattedDuration });
-			}
-		}
 	};
 
 	const onChangeDescription = (newDescription) => {
@@ -170,33 +174,16 @@ export default function Edit({ attributes, setAttributes }) {
 								onChange={onChangeEndDate}
 								minTime={timeCheck ? dayjs(timeCheck) : null}
 								minDate={timeCheck ? dayjs(timeCheck) : null}
+								disabled={!isStartDateSelected} // Disable endDate initially
 							/>
 						</LocalizationProvider>
 					</div>
 					<div style={{ display: 'flex', position: 'relative' }}>
 						<TextControl
 							label={__('Duration', 'st-webinar-management')}
-							value={duration}
-							onChange={(value) => {
-								// Validate duration if entered manually
-								if (validateDuration(value)) {
-									setAttributes({ duration: value });
-								}
-							}}
-							onClick={(event) => {
-								event.stopPropagation();
-								toggleModal();
-							}}
+							value={selectedDuration}
+							className="st-diable-duration"
 						/>
-						<div ref={modalRef} className={`duration-picker-modal ${isOpen ? 'active' : ''}`} onClick={(e) => e.stopPropagation()}>
-							{isOpen && (
-								<DurationPicker
-									onChange={onChangeDuration}
-									initialDuration={{ hours: 0, minutes: 0 }} // Set initial duration
-									showSeconds={false} // Hide seconds selection
-								/>
-							)}
-						</div>
 					</div>
 				</div>
 				<div style={{ display: 'flex', justifyContent: 'space-between' }}>

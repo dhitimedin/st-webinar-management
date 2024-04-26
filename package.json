@@ -26,8 +26,7 @@
 		"dayjs": "^1.11.10",
 		"path": "^0.12.7",
 		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
-		"react-duration-picker": "^1.1.1"
+		"react-dom": "^18.2.0"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.17.8",
