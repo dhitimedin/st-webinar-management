@@ -251,6 +251,9 @@ class ST_Webinar_Management {
 						'items' => array(
 							'type' => 'object',
 							'properties' => array(
+								'index'                => array(
+									'type' => 'number',
+								),
 								'highlightTime'        => array(
 									'type' => 'string', // Assuming speaker ID is an integer.
 								),
@@ -308,6 +311,7 @@ class ST_Webinar_Management {
 		$sanitized_highlights = array();
 		foreach ( $value as $highlights ) {
 			$sanitized_highlight = array(
+				'index'                => wp_kses_post( $highlights['index'] ),
 				'highlightTime'        => wp_kses_post( $highlights['highlightTime'] ),
 				'highlightDescription' => wp_kses_post( $highlights['highlightDescription'] ),
 				// Sanitize 'avatar_urls' based on its format.

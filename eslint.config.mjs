@@ -34,6 +34,13 @@ export default [
       "react/jsx-indent": [2, "tab"],
       "react/jsx-indent-props": [2, "tab"],
       "no-unsafe-optional-chaining": "error",
+      'react/function-component-definition': [
+        2,
+        {
+          namedComponents: ['arrow-function', 'function-declaration'],
+          unnamedComponents: 'arrow-function',
+        },
+      ],
     },
     settings: {
       'import/ignore': ['node_modules/react-native/index\\.jsx$'],

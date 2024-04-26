@@ -1,6 +1,6 @@
 import { registerBlockType } from '@wordpress/blocks';
 import metadata from '../block.json';
-import { HighlightEdit } from './highlightedit';
+import HighlightEdit from './highlightedit';
 
 // Import your SCSS file
 import '../scss/highlight.scss';

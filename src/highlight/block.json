@@ -12,6 +12,9 @@
             "type": "array",
 			"source": "query",
 			"query": {
+                "index": {
+                    "type": "number"
+                },
 				"highlightTime":{
 					"type": "string"
 				},

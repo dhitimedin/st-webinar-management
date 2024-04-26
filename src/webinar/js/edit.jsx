@@ -1,6 +1,6 @@
-import { React } from 'react';
+import React from 'react';
 import { useState, useEffect, useRef } from '@wordpress/element';
-import { InspectorControls, useBlockProps, RichText } from '@wordpress/block-editor';
+import { InspectorControls, RichText } from '@wordpress/block-editor';
 import {
 	PanelBody,
 	TextControl,
@@ -14,14 +14,15 @@ import { useEntityProp } from '@wordpress/core-data';
 import { __ } from '@wordpress/i18n';
 
 export default function Edit({ attributes, setAttributes }) {
-	const postTitle = useSelect('core/editor').getCurrentPost().title;
+	const postTitle = useSelect(
+		(select) => select('core/editor').getCurrentPost().title,
+		[],
+	);
 
 	const modalRef = useRef(null);
 	const [isOpen, setIsOpen] = useState(false);
 	const [isStartDatePickerOpen, setIsStartDatePickerOpen] = useState(false);
 	const [isEndDatePickerOpen, setIsEndDatePickerOpen] = useState(false);
-
-	const blockProps = useBlockProps();
 
 	const postType = useSelect(
 		(select) => select('core/editor').getCurrentPostType(),
@@ -111,7 +112,8 @@ export default function Edit({ attributes, setAttributes }) {
 			formattedDuration += `${hours} hour${hours > 1 ? 's' : ''}`;
 		}
 		if (minutes > 0) {
-			formattedDuration += (formattedDuration.length > 0 ? ' ' : '') + `${minutes} minute${minutes > 1 ? 's' : ''}`;
+			formattedDuration += formattedDuration.length > 0 ? ' ' : '';
+			formattedDuration += `${minutes} minute${minutes !== 1 ? 's' : ''}`;
 		}
 		return formattedDuration;
 	};
@@ -268,7 +270,6 @@ export default function Edit({ attributes, setAttributes }) {
 						</span>
 						<div>
 							<RichText
-								{...blockProps}
 								tagName="p"
 								onChange={onChangeDescription}
 								allowedFormats={['core/bold', 'core/italic']}
@@ -288,49 +289,53 @@ const SpeakersChecklistControl = (props) => {
 	const [speakerLists, setSpeakerLists] = useState([]);
 
 	// Use select hook directly within the component body
-	const speakersData = useSelect((select) => select('core').getUsers({ roles: 'speaker' }));
+	const registeredSpeakers = useSelect((select) => select('core').getUsers({ roles: 'speaker' }));
+
+	const { label, onChange, speakers } = props;
 
 	useEffect(() => {
 		// Fetch speakers inside useEffect
 		const fetchSpeakers = async () => {
-			const speakers = speakersData ? speakersData.map((speaker) => ({
+			const formattedSpeakers = registeredSpeakers?.map((speaker) => ({
 				id: speaker.id,
 				name: speaker.name,
 				description: speaker.description,
 				avatar_urls: JSON.stringify(speaker.avatar_urls),
-			})) : [];
-			setSpeakerLists(speakers);
+			})) || [];
+			setSpeakerLists(formattedSpeakers);
 			setIsLoading(false);
 		};
 
 		fetchSpeakers();
-	}, [speakersData]);
+	}, [registeredSpeakers]);
+
+	const handleChange = (speakerId, checked) => {
+		const updatedSpeakers = [...speakers]; // Copy to avoid mutation
+		const speakerIndex = updatedSpeakers.findIndex((spkr) => spkr.id === speakerId);
+
+		if (checked && speakerIndex === -1) {
+			updatedSpeakers.push(speakerLists.find((spkr) => spkr.id === speakerId));
+		} else if (!checked && speakerIndex !== -1) {
+			updatedSpeakers.splice(speakerIndex, 1);
+		}
+
+		onChange(updatedSpeakers);
+	};
 
 	return (
-		<BaseControl label={props.label}>
-			{isLoading ? (
-				<p>{__('Loading speakers...', 'st-webinar-management')}</p>
+		<BaseControl label={label}>
+			{isLoading && speakerLists.length <= 0 ? (
+				<p>{__('Loading speakers or an Empty speaker list...', 'st-webinar-management')}</p>
 			) : (
-				speakerLists.length > 0 ? (
-					speakerLists.map((speaker) => (
-						<CheckboxControl
-							key={speaker.id}
-							label={speaker.name}
-							// Use props.metaKey.speakers for safety
-							checked={props.speakers?.some((selected) => selected.id === speaker.id)}
-							onChange={(checked, value) => {
-								const updatedSpeakers = checked
-									// Handle case where speakers is initially empty
-									? [...(props.speakers || []), speaker]
-									: props.speakers?.filter((speaker) => speaker.id !== value);
-								// props.setMeta({ ...props.metaKey, speakers: updatedSpeakers });
-								props.onChange(updatedSpeakers);
-							}}
-						/>
-					))
-				) : (
-					<p>{__('No speakers selected.', 'st-webinar-management')}</p>
-				)
+				speakerLists.map((speaker) => (
+					<CheckboxControl
+						key={speaker.id}
+						label={speaker.name}
+						// Use props.metaKey.speakers for safety
+						checked={speakers.some((selected) => selected.id === speaker.id)}
+						onChange={(checked) => handleChange(speaker.id, checked)}
+					/>
+				))
 			)}
 		</BaseControl>
 	);

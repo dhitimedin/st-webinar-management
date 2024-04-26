@@ -1,8 +1,7 @@
-import { React } from 'react';
 import { registerBlockType } from '@wordpress/blocks';
 import { useBlockProps, RichText } from '@wordpress/block-editor';
 import metadata from '../block.json';
-import { Edit } from './edit';
+import Edit from './edit';
 
 // Import your SCSS file
 import '../scss/block-editor.scss';

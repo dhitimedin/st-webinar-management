@@ -1,4 +1,4 @@
-import { React } from 'react';
+import React from 'react';
 import { TextControl } from '@wordpress/components';
 import { TimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
@@ -65,7 +65,7 @@ export default function HighlightEdit({ attributes, setAttributes }) {
 							label={__('Basic time picker', 'st-webinar-management')}
 							value={dayjs(row.highlightTime) || dayjs()}
 							onChange={
-								(newValue) => updateHighlightRow(index, { ...row, highlightTime: newValue })
+								(newValue) => updateHighlightRow(row.index, { ...row, highlightTime: newValue })
 							}
 						/>
 					</LocalizationProvider>
@@ -74,12 +74,12 @@ export default function HighlightEdit({ attributes, setAttributes }) {
 						value={row.highlightDescription || ''} // Use default highlightDescription or row specific description
 						onChange={
 							(newDescription) => updateHighlightRow(
-								index,
+								row.index,
 								{ ...row, highlightDescription: newDescription },
 							)
 						}
 					/>
-					<button type="button" className="remove-row-btn" onClick={() => removeHighlightRow(index)}>
+					<button type="button" className="remove-row-btn" onClick={() => removeHighlightRow(row.index)}>
 						{ __('Remove', 'st-webinar-management') }
 					</button>
 				</div>
