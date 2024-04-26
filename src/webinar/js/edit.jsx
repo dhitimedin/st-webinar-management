@@ -147,86 +147,84 @@ export default function Edit({ attributes, setAttributes }) {
 			</InspectorControls>
 			<div className="webinar-block-editor">
 				{/* Textboxes for title, subtitle, and other details */}
-				<div>
+				<TextControl
+					label={__('Subtitle', 'st-webinar-management')}
+					value={subtitle}
+					onChange={onChangeSubtitle}
+				/>
+				<div className="webinar-date-time-diuration-container">
+					<div className="webinar-date-time-container">
+						<LocalizationProvider dateAdapter={AdapterDayjs}>
+							<DateTimePicker
+								label={__('Begins at', 'st-webinar-management')}
+								value={startDate ? dayjs(startDate) : null}
+								onChange={onChangeStartDate}
+							/>
+						</LocalizationProvider>
+					</div>
+					<div className="webinar-date-time-container">
+						<LocalizationProvider dateAdapter={AdapterDayjs}>
+							<DateTimePicker
+								label={__('Ends at', 'st-webinar-management')}
+								value={endDate ? dayjs(endDate) : null}
+								onChange={onChangeEndDate}
+								minTime={timeCheck ? dayjs(timeCheck) : null}
+								minDate={timeCheck ? dayjs(timeCheck) : null}
+							/>
+						</LocalizationProvider>
+					</div>
+					<div style={{ display: 'flex', position: 'relative' }}>
+						<TextControl
+							label={__('Duration', 'st-webinar-management')}
+							value={duration}
+							onChange={(value) => {
+								// Validate duration if entered manually
+								if (validateDuration(value)) {
+									setAttributes({ duration: value });
+								}
+							}}
+							onClick={(event) => {
+								event.stopPropagation();
+								toggleModal();
+							}}
+						/>
+						<div ref={modalRef} className={`duration-picker-modal ${isOpen ? 'active' : ''}`} onClick={(e) => e.stopPropagation()}>
+							{isOpen && (
+								<DurationPicker
+									onChange={onChangeDuration}
+									initialDuration={{ hours: 0, minutes: 0 }} // Set initial duration
+									showSeconds={false} // Hide seconds selection
+								/>
+							)}
+						</div>
+					</div>
+				</div>
+				<div style={{ display: 'flex', justifyContent: 'space-between' }}>
 					<TextControl
-						label={__('Subtitle', 'st-webinar-management')}
-						value={subtitle}
-						onChange={onChangeSubtitle}
+						label={__('Registration Form', 'st-webinar-management')}
+						value={registrationForm}
+						onChange={onChangeRegistrationForm}
 					/>
-					<div className="webinar-date-time-diuration-container">
-						<div className="webinar-date-time-container">
-							<LocalizationProvider dateAdapter={AdapterDayjs}>
-								<DateTimePicker
-									label={__('Begins at', 'st-webinar-management')}
-									value={startDate ? dayjs(startDate) : null}
-									onChange={onChangeStartDate}
-								/>
-							</LocalizationProvider>
-						</div>
-						<div className="webinar-date-time-container">
-							<LocalizationProvider dateAdapter={AdapterDayjs}>
-								<DateTimePicker
-									label={__('Ends at', 'st-webinar-management')}
-									value={endDate ? dayjs(endDate) : null}
-									onChange={onChangeEndDate}
-									minTime={timeCheck ? dayjs(timeCheck) : null}
-									minDate={timeCheck ? dayjs(timeCheck) : null}
-								/>
-							</LocalizationProvider>
-						</div>
-						<div style={{ display: 'flex', position: 'relative' }}>
-							<TextControl
-								label={__('Duration', 'st-webinar-management')}
-								value={duration}
-								onChange={(value) => {
-									// Validate duration if entered manually
-									if (validateDuration(value)) {
-										setAttributes({ duration: value });
-									}
-								}}
-								onClick={(event) => {
-									event.stopPropagation();
-									toggleModal();
-								}}
-							/>
-							<div ref={modalRef} className={`duration-picker-modal ${isOpen ? 'active' : ''}`} onClick={(e) => e.stopPropagation()}>
-								{isOpen && (
-									<DurationPicker
-										onChange={onChangeDuration}
-										initialDuration={{ hours: 0, minutes: 0 }} // Set initial duration
-										showSeconds={false} // Hide seconds selection
-									/>
-								)}
-							</div>
-						</div>
-					</div>
-					<div style={{ display: 'flex', justifyContent: 'space-between' }}>
-						<TextControl
-							label={__('Registration Form', 'st-webinar-management')}
-							value={registrationForm}
-							onChange={onChangeRegistrationForm}
+					<TextControl
+						label={__('Streaming Link', 'st-webinar-management')}
+						value={streamingLink}
+						onChange={onChangeStreamingLink}
+					/>
+				</div>
+				{/* Other controls */}
+				<div className="webinar-description">
+					{/* Label with for attribute */}
+					<span className="field-header">
+						{__('Description', 'st-webinar-management')}
+					</span>
+					<div>
+						<RichText
+							tagName="p"
+							onChange={onChangeDescription}
+							allowedFormats={['core/bold', 'core/italic']}
+							value={attributes.description}
+							placeholder={__('Write your text...')}
 						/>
-						<TextControl
-							label={__('Streaming Link', 'st-webinar-management')}
-							value={streamingLink}
-							onChange={onChangeStreamingLink}
-						/>
-					</div>
-					{/* Other controls */}
-					<div className="webinar-description">
-						{/* Label with for attribute */}
-						<span className="field-header">
-							{__('Description', 'st-webinar-management')}
-						</span>
-						<div>
-							<RichText
-								tagName="p"
-								onChange={onChangeDescription}
-								allowedFormats={['core/bold', 'core/italic']}
-								value={attributes.description}
-								placeholder={__('Write your text...')}
-							/>
-						</div>
 					</div>
 				</div>
 			</div>

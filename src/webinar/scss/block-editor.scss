@@ -232,6 +232,10 @@ body {
 	/* Styles for the block editor wrapper */
 	width: 80%;
     margin: auto;
+	display: flex;
+    flex-direction: column;
+    row-gap: 2vw;
+	margin-bottom: 2vw;
 	.webinar-date-time-diuration-container {
 		display: flex;
 		justify-content: space-between;
@@ -242,7 +246,8 @@ body {
 			position: relative;
 			.MuiFormControl-root.MuiTextField-root.css-z3c6am-MuiFormControl-root-MuiTextField-root {
 				margin-bottom: calc(8px);
-				.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root {
+				.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root,
+				.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLabel-animated.MuiInputLabel-shrink.MuiInputLabel-sizeMedium.MuiInputLabel-outlined.MuiFormLabel-colorPrimary.MuiFormLabel-filled.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLabel-animated.MuiInputLabel-shrink.MuiInputLabel-sizeMedium.MuiInputLabel-outlined.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root {
 					transform: unset;
 					position: relative;
 					font-size: 11px;
@@ -253,6 +258,7 @@ body {
 					margin-bottom: calc(8px);
 					padding: 0px;
 				}
+
 			}
 		}
 	}
@@ -311,4 +317,10 @@ body {
 		padding: 0px;
 	}
 
+}
+
+.highlight-row-container {
+	.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-adornedEnd.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root {
+		margin-bottom: 8px;
+	}
 }

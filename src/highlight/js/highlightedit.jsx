@@ -56,6 +56,7 @@ export default function HighlightEdit({ attributes, setAttributes }) {
 
 	return (
 		<div className="highlight-row-container">
+			<h2>{__('Add Highlights', 'st-webinar-management')}</h2>
 			{rows.map((row) => (
 				<div key={row.index} className="highlight-row">
 					<LocalizationProvider dateAdapter={AdapterDayjs}>
