@@ -49,7 +49,14 @@ export default function HighlightEdit({ attributes, setAttributes }) {
 	}, [minTime, maxTime]);
 
 	const addHighlightRow = () => {
-		setRows([...rows, { index: rows.length, highlightTime: null, highlightDescription: '' }]);
+		setRows([
+			...rows,
+			{
+				index: rows.length,
+				highlightTime: null,
+				highlightDescription: '',
+			},
+		]);
 		// setAttributes({ highlightRows: rows });
 	};
 
@@ -83,7 +90,7 @@ export default function HighlightEdit({ attributes, setAttributes }) {
 							ampm={false}
 							closeOnSelect
 							label={__('Basic time picker', 'st-webinar-management')}
-							value={dayjs(row.highlightTime) || null}
+							value={row.highlightTime ? dayjs(row.highlightTime) : null}
 							onChange={
 								(newValue) => updateHighlightRow(row.index, { ...row, highlightTime: newValue })
 							}
