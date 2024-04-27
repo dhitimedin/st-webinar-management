@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEntityProp } from '@wordpress/core-data';
 import { useSelect, dispatch } from '@wordpress/data';
-import { useState, useEffect, useRef } from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
 import { InspectorControls, RichText } from '@wordpress/block-editor';
 import {
 	PanelBody,
@@ -39,8 +39,6 @@ export default function Edit({ attributes, setAttributes }) {
 		speakers,
 	} = meta;
 
-	const modalRef = useRef(null);
-	const [isOpen, setIsOpen] = useState(false);
 	const [timeCheck, setTimeCheck] = useState(startDate);
 	const [isStartDateSelected, setIsStartDateSelected] = useState(false);
 	const [selectedDuration, setSelectedDuration] = useState(duration);
@@ -48,30 +46,6 @@ export default function Edit({ attributes, setAttributes }) {
 	useEffect(() => {
 		setMeta({ ...meta, title: postTitle });
 	}, [postTitle]);
-
-	useEffect(() => {
-		// Add event listener on modal open
-		const handleClickOutside = (event) => {
-			if (
-				isOpen
-				&& modalRef.current
-				&& !modalRef.current.contains(event.target)
-				&& !modalRef.current.contains(event.currentTarget)
-			) {
-				setIsOpen(false);
-			}
-		};
-		if (isOpen) {
-			document.addEventListener('click', handleClickOutside);
-		} else {
-			document.removeEventListener('click', handleClickOutside);
-		}
-
-		return () => {
-			// Remove event listeners on unmount
-			document.removeEventListener('click', handleClickOutside);
-		};
-	}, [isOpen]);
 
 	useEffect(() => {
 		// Update isStartDateSelected on startDate change
@@ -83,7 +57,11 @@ export default function Edit({ attributes, setAttributes }) {
 	};
 
 	const onChangeStartDate = (newStartDate) => {
-		setMeta({ ...meta, startDate: newStartDate });
+		setMeta({ ...meta, startDate: newStartDate.toString() });
+		setAttributes({
+			...attributes,
+			startDate: newStartDate.toString(),
+		});
 		setTimeCheck(newStartDate.toString());
 		setIsStartDateSelected(true); // Enable endDate when startDate is selected
 	};
@@ -98,20 +76,20 @@ export default function Edit({ attributes, setAttributes }) {
 			// Update duration with calculated values
 			setMeta({
 				...meta,
-				endDate: newEndDate,
+				endDate: newEndDate.toString(),
 				duration: calculatedDuration,
 			});
 			setSelectedDuration(calculatedDuration);
 			setAttributes({
 				...attributes,
-				endDate: newEndDate,
+				endDate: newEndDate.toString(),
 				duration: calculatedDuration,
 			});
 		} else {
-			setMeta({ ...meta, endDate: newEndDate });
+			setMeta({ ...meta, endDate: newEndDate.toString() });
 			setAttributes({
 				...attributes,
-				endDate: newEndDate,
+				endDate: newEndDate.toString(),
 			});
 		}
 		// setMeta({ ...meta, endDate: newEndDate });
@@ -153,8 +131,8 @@ export default function Edit({ attributes, setAttributes }) {
 		if (isStartDateSelected && endDate && adjacentBlock) {
 			const minTime = dayjs(startDate);
 			const maxTime = dayjs(endDate);
-			updateAdjacentBlockState(adjacentBlock, 'minTime', minTime);
-			updateAdjacentBlockState(adjacentBlock, 'maxTime', maxTime);
+			updateAdjacentBlockState(adjacentBlock, 'minTime', startDate);
+			updateAdjacentBlockState(adjacentBlock, 'maxTime', endDate);
 		} else if (adjacentBlock) {
 			// Clear minTime and maxTime if conditions not met
 			updateAdjacentBlockState(adjacentBlock, 'minTime', null);

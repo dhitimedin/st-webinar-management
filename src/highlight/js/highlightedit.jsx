@@ -22,7 +22,7 @@ export default function HighlightEdit({ attributes, setAttributes }) {
 		|| [
 			{
 				index: 0,
-				highlightTime: dayjs(),
+				highlightTime: null,
 				highlightDescription: '',
 			},
 		],
@@ -34,7 +34,7 @@ export default function HighlightEdit({ attributes, setAttributes }) {
 
 	useEffect(() => {
 		// Update the block attributes when the rows change
-		setAttributes({ highlightRows: rows });
+		setAttributes({ ...attributes, highlightRows: rows });
 		setMeta({ ...meta, highlightRows: rows });
 	}, [rows]);
 
@@ -49,7 +49,7 @@ export default function HighlightEdit({ attributes, setAttributes }) {
 	}, [minTime, maxTime]);
 
 	const addHighlightRow = () => {
-		setRows([...rows, { index: rows.length, highlightTime: dayjs(), highlightDescription: '' }]);
+		setRows([...rows, { index: rows.length, highlightTime: null, highlightDescription: '' }]);
 		// setAttributes({ highlightRows: rows });
 	};
 
@@ -58,10 +58,15 @@ export default function HighlightEdit({ attributes, setAttributes }) {
 		setRows(updatedRows);
 	};
 
-	const updateHighlightRow = (rowIndex, updatedData) => {
-		const updatedRows = rows.map((row) => {
-			if (row.index === rowIndex) {
-				return { ...row, ...updatedData };
+	const updateHighlightRow = (rowIndex, newData) => {
+		const updatedRows = rows.map((row, index) => {
+			if (index === rowIndex) {
+				const updatedRow = { ...row, ...newData };
+				// Convert highlightTime to string if it exists
+				if (newData.highlightTime) {
+					updatedRow.highlightTime = newData.highlightTime.toString();
+				}
+				return updatedRow;
 			}
 			return row;
 		});
@@ -78,12 +83,12 @@ export default function HighlightEdit({ attributes, setAttributes }) {
 							ampm={false}
 							closeOnSelect
 							label={__('Basic time picker', 'st-webinar-management')}
-							value={dayjs(row.highlightTime) || dayjs()}
+							value={dayjs(row.highlightTime) || null}
 							onChange={
 								(newValue) => updateHighlightRow(row.index, { ...row, highlightTime: newValue })
 							}
-							minTime={minTime}
-							maxTime={maxTime}
+							minTime={minTimeState ? dayjs(minTimeState) : null}
+							maxTime={maxTimeState ? dayjs(maxTimeState) : null}
 						/>
 					</LocalizationProvider>
 					<TextControl
