@@ -71,7 +71,7 @@ export default function HighlightEdit({ attributes, setAttributes }) {
 				const updatedRow = { ...row, ...newData };
 				// Convert highlightTime to string if it exists
 				if (newData.highlightTime) {
-					updatedRow.highlightTime = newData.highlightTime.toString();
+					updatedRow.highlightTime = newData.highlightTime.format('YYYY-MM-DD HH:mm');
 				}
 				return updatedRow;
 			}

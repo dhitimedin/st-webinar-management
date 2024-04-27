@@ -58,7 +58,6 @@ export default function Edit({ attributes, setAttributes }) {
 
 	const onChangeStartDate = (newStartDate) => {
 		const dateString = newStartDate.format('YYYY-MM-DD HH:mm Z');
-		console.log( dateString );
 		setMeta({ ...meta, startDate: dateString });
 		setAttributes({
 			...attributes,
