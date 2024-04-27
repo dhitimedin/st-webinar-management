@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEntityProp } from '@wordpress/core-data';
-import { useSelect } from '@wordpress/data';
+import { useSelect, dispatch } from '@wordpress/data';
 import { useState, useEffect, useRef } from '@wordpress/element';
 import { InspectorControls, RichText } from '@wordpress/block-editor';
 import {
@@ -22,6 +22,10 @@ export default function Edit({ attributes, setAttributes }) {
 	);
 	const postType = useSelect(
 		(select) => select('core/editor').getCurrentPostType(),
+		[],
+	);
+	const blocks = useSelect(
+		(select) => select('core/block-editor').getBlocks(),
 		[],
 	);
 	const [meta, setMeta] = useEntityProp('postType', postType, 'meta');
@@ -69,6 +73,11 @@ export default function Edit({ attributes, setAttributes }) {
 		};
 	}, [isOpen]);
 
+	useEffect(() => {
+		// Update isStartDateSelected on startDate change
+		setIsStartDateSelected(!!startDate);
+	}, [startDate]);
+
 	const onChangeSubtitle = (newSubtitle) => {
 		setMeta({ ...meta, subtitle: newSubtitle });
 	};
@@ -93,8 +102,17 @@ export default function Edit({ attributes, setAttributes }) {
 				duration: calculatedDuration,
 			});
 			setSelectedDuration(calculatedDuration);
+			setAttributes({
+				...attributes,
+				endDate: newEndDate,
+				duration: calculatedDuration,
+			});
 		} else {
 			setMeta({ ...meta, endDate: newEndDate });
+			setAttributes({
+				...attributes,
+				endDate: newEndDate,
+			});
 		}
 		// setMeta({ ...meta, endDate: newEndDate });
 	};
@@ -116,6 +134,33 @@ export default function Edit({ attributes, setAttributes }) {
 		}
 		return formattedDuration;
 	};
+
+	const findAdjacentBlock = (blockName) => {
+		const adjacentBlock = blocks.find((block) => block.name === blockName);
+		return adjacentBlock;
+	};
+
+	const updateAdjacentBlockState = (adjacentBlock, attributeName, attributeValue) => {
+		if (!adjacentBlock) return; // Handle case where block is not found
+
+		// Assuming the adjacent block uses setAttributes to update state
+		dispatch('core/block-editor').updateBlockAttributes(adjacentBlock.clientId, { [attributeName]: attributeValue });
+	};
+
+	useEffect(() => {
+		const adjacentBlock = findAdjacentBlock('st-webinar-management/highlight');
+
+		if (isStartDateSelected && endDate && adjacentBlock) {
+			const minTime = dayjs(startDate);
+			const maxTime = dayjs(endDate);
+			updateAdjacentBlockState(adjacentBlock, 'minTime', minTime);
+			updateAdjacentBlockState(adjacentBlock, 'maxTime', maxTime);
+		} else if (adjacentBlock) {
+			// Clear minTime and maxTime if conditions not met
+			updateAdjacentBlockState(adjacentBlock, 'minTime', null);
+			updateAdjacentBlockState(adjacentBlock, 'maxTime', null);
+		}
+	}, [isStartDateSelected, endDate]);
 
 	const onChangeDescription = (newDescription) => {
 		setAttributes({ ...attributes, description: newDescription });

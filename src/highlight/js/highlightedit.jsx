@@ -9,7 +9,7 @@ import { useEntityProp } from '@wordpress/core-data';
 import { __ } from '@wordpress/i18n';
 
 export default function HighlightEdit({ attributes, setAttributes }) {
-	const { highlightRows } = attributes;
+	const { highlightRows, minTime, maxTime } = attributes;
 	const postType = useSelect(
 		(select) => select('core/editor').getCurrentPostType(),
 		[],
@@ -28,11 +28,25 @@ export default function HighlightEdit({ attributes, setAttributes }) {
 		],
 	);
 
+	// State for minTime and maxTime
+	const [minTimeState, setMinTimeState] = useState(minTime);
+	const [maxTimeState, setMaxTimeState] = useState(maxTime);
+
 	useEffect(() => {
 		// Update the block attributes when the rows change
 		setAttributes({ highlightRows: rows });
 		setMeta({ ...meta, highlightRows: rows });
 	}, [rows]);
+
+	useEffect(() => {
+		if (minTime) {
+			setMinTimeState(minTime);
+		}
+
+		if (maxTime) {
+			setMaxTimeState(maxTime);
+		}
+	}, [minTime, maxTime]);
 
 	const addHighlightRow = () => {
 		setRows([...rows, { index: rows.length, highlightTime: dayjs(), highlightDescription: '' }]);
@@ -68,6 +82,8 @@ export default function HighlightEdit({ attributes, setAttributes }) {
 							onChange={
 								(newValue) => updateHighlightRow(row.index, { ...row, highlightTime: newValue })
 							}
+							minTime={minTime}
+							maxTime={maxTime}
 						/>
 					</LocalizationProvider>
 					<TextControl
@@ -85,7 +101,12 @@ export default function HighlightEdit({ attributes, setAttributes }) {
 					</button>
 				</div>
 			))}
-			<button type="button" className="add-row-btn" onClick={addHighlightRow}>
+			<button
+				type="button"
+				className="add-row-btn"
+				disabled={!minTimeState || !maxTimeState} // Disable button if minTime or maxTime is not set
+				onClick={addHighlightRow}
+			>
 				{ __('Add Highlight', 'st-webinar-management') }
 			</button>
 		</div>

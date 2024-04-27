@@ -14,6 +14,14 @@ registerBlockType(metadata.name, {
 			type: 'array',
 			default: [],
 		},
+		minTime: {
+			type: 'string',
+			default: null,
+		},
+		maxTime: {
+			type: 'string',
+			default: null,
+		}
 	},
 	edit: HighlightEdit,
 	save: () => null,

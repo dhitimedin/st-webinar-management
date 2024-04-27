@@ -23,6 +23,14 @@
 				}
 			},
             "default": []
-        }
+        },
+		"minTime": {
+			"type": "string",
+            "deafault": null
+		},
+		"maxTime": {
+			"type": "string",
+            "deafault": null
+		}
     }
 }
