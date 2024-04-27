@@ -57,12 +57,14 @@ export default function Edit({ attributes, setAttributes }) {
 	};
 
 	const onChangeStartDate = (newStartDate) => {
-		setMeta({ ...meta, startDate: newStartDate.toString() });
+		const dateString = newStartDate.format('YYYY-MM-DD HH:mm Z');
+		console.log( dateString );
+		setMeta({ ...meta, startDate: dateString });
 		setAttributes({
 			...attributes,
-			startDate: newStartDate.toString(),
+			startDate: dateString,
 		});
-		setTimeCheck(newStartDate.toString());
+		setTimeCheck(dateString);
 		setIsStartDateSelected(true); // Enable endDate when startDate is selected
 	};
 
@@ -74,22 +76,24 @@ export default function Edit({ attributes, setAttributes }) {
 			const durationMinutes = dayjs(newEndDate).diff(startDate, 'minutes') % 60;
 			const calculatedDuration = `${durationHours} hour${durationHours !== 1 ? 's' : ''} ${durationMinutes} minute${durationMinutes !== 1 ? 's' : ''}`;
 			// Update duration with calculated values
+			const dateString = newEndDate.format('YYYY-MM-DD HH:mm Z');
 			setMeta({
 				...meta,
-				endDate: newEndDate.toString(),
+				endDate: dateString,
 				duration: calculatedDuration,
 			});
 			setSelectedDuration(calculatedDuration);
 			setAttributes({
 				...attributes,
-				endDate: newEndDate.toString(),
+				endDate: dateString,
 				duration: calculatedDuration,
 			});
 		} else {
-			setMeta({ ...meta, endDate: newEndDate.toString() });
+			const dateString = newEndDate.format('YYYY-MM-DD HH:mm Z');
+			setMeta({ ...meta, endDate: dateString });
 			setAttributes({
 				...attributes,
-				endDate: newEndDate.toString(),
+				endDate: dateString,
 			});
 		}
 		// setMeta({ ...meta, endDate: newEndDate });
@@ -129,8 +133,6 @@ export default function Edit({ attributes, setAttributes }) {
 		const adjacentBlock = findAdjacentBlock('st-webinar-management/highlight');
 
 		if (isStartDateSelected && endDate && adjacentBlock) {
-			const minTime = dayjs(startDate);
-			const maxTime = dayjs(endDate);
 			updateAdjacentBlockState(adjacentBlock, 'minTime', startDate);
 			updateAdjacentBlockState(adjacentBlock, 'maxTime', endDate);
 		} else if (adjacentBlock) {
