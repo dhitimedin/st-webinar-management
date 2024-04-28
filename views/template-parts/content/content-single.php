@@ -4,9 +4,7 @@
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
  *
- * @package WordPress
- * @subpackage Twenty_Twenty_One
- * @since Twenty Twenty-One 1.0
+ * @package st-webinar-management
  */
 
 if ( ! function_exists( 'get_breadcrumb' ) ) {
@@ -89,7 +87,6 @@ $start_date = $start_date ? explode( ' ', $start_date ) : null;
 
 <?php if ( $start_date ) : ?>
 	<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-
 		<header class="entry-header alignwide">
 			<div class="st-webinar-breadcrumb">
 				<?php get_breadcrumb(); ?>
@@ -109,143 +106,135 @@ $start_date = $start_date ? explode( ' ', $start_date ) : null;
 			</div>
 			<h2><?php echo esc_html( get_post_meta( get_the_ID(), 'subtitle', true ) ); ?></h2>
 		</header><!-- .entry-header -->
-
-		<div class="entry-content">
-			<div id="st-program-info-container" class="st-program-info-container">
-				<div class="st-day-container">
-					<div class="st-icon-container">
-						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#21689D" class="bi bi-calendar" viewBox="0 0 16 16">
-							<path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
-						</svg>
-					</div>
-					<div class="text-container">
-						<span><?php esc_html_e( 'Day', 'st-webinar-management' ); ?></span>
-						<span>
-							<?php esc_html_e( 'Fourth-fair', 'st-webinar-management' ); ?>
-							<?php echo esc_attr( gmdate( 'd F', strtotime( $start_date[0] ) ) ); ?>
-						</span>
-					</div>
-				</div>
-				<div  class="st-schedule-container">
-					<div class="st-icon-container">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="#21689D" class="bi bi-clock" viewBox="0 0 16 16">
-							<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
-							<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
-						</svg>
-					</div>
-					<div class="text-container">
-						<span><?php esc_html_e( 'Schedule', 'st-webinar-management' ); ?></span>
-						<span>
-							<?php echo esc_attr( "{$start_date[1]}, UTC$start_date[2]" ); ?>
-						</span>
-					</div>
-				</div>
-				<div  class="st-duration-container">
-					<div class="st-icon-container">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="#21689D" class="bi bi-hourglass-split" viewBox="0 0 16 16">
-							<path d="M2.5 15a.5.5 0 1 1 0-1h1v-1a4.5 4.5 0 0 1 2.557-4.06c.29-.139.443-.377.443-.59v-.7c0-.213-.154-.451-.443-.59A4.5 4.5 0 0 1 3.5 3V2h-1a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-1v1a4.5 4.5 0 0 1-2.557 4.06c-.29.139-.443.377-.443.59v.7c0 .213.154.451.443.59A4.5 4.5 0 0 1 12.5 13v1h1a.5.5 0 0 1 0 1zm2-13v1c0 .537.12 1.045.337 1.5h6.326c.216-.455.337-.963.337-1.5V2zm3 6.35c0 .701-.478 1.236-1.011 1.492A3.5 3.5 0 0 0 4.5 13s.866-1.299 3-1.48zm1 0v3.17c2.134.181 3 1.48 3 1.48a3.5 3.5 0 0 0-1.989-3.158C8.978 9.586 8.5 9.052 8.5 8.351z"/>
-						</svg>
-					</div>
-					<div class="text-container">
-						<span><?php esc_html_e( 'Duration', 'st-webinar-management' ); ?></span>
-						<span>
-							<?php echo esc_html( get_post_meta( get_the_ID(), 'duration', true ) ); ?>
-						</span>
-					</div>
-				</div>
-			</div>
-			<figure id="st-post-thumbnail" class="st-post-thumbnail">
-				<img src="<?php echo esc_url_raw( get_the_post_thumbnail_url( get_the_ID() ) ); ?>" class="st-webinar-banner" />
-			</figure>
-			<div id="wp-block-st-webinar-management-webinar" class="wp-block-st-webinar-management-webinar">
-				<header class="st-webinar-section-header">
-					<h2 class="st-webinar-section-title"><?php esc_html_e( 'Webinar Details', 'st-webinar-management' ); ?></h2>
-					<div class="st-color-bar-h2"></div>
-				</header>
-
-				<?php
-				echo wp_kses_post( get_the_content() );
-
-				// wp_link_pages(
-				// array(
-				// 'before'   => '<nav class="page-links" aria-label="' . esc_attr__( 'Page', 'twentytwentyone' ) . '">',
-				// 'after'    => '</nav>',
-				// * translators: %: Page number. */
-				// 'pagelink' => esc_html__( 'Page %', 'twentytwentyone' ),
-				// )
-				// );
-				?>
-			</div>
-		</div><!-- .entry-content -->
-		<!-- Program Highlights -->
-		<div class="st-highlight-content">
-			<?php $highlights = get_post_meta( get_the_ID(), 'highlightRows', true ); ?>
-			<?php if ( ! empty( $highlights ) ) : ?>
-				<!-- section-header -->
-				<header class="st-webinar-section-header">
-					<h2 class="st-webinar-section-title"><?php esc_html_e( 'Program', 'st-webinar-management' ); ?></h2>
-					<div class="st-color-bar-h2"></div>
-				</header>
-				<!-- section-header -->
-				<?php foreach ( $highlights as $highlight ) : ?>
-					<div class="st-highlight">
-						<div class="st-highlight-time">
-							<?php echo esc_attr( gmdate( 'H:i', strtotime( $highlight['highlightTime'] ) ) ); ?>
+		<div class="st-single-page-webinar-container">
+			<div class="st-webinar-details-container">
+				<div class="entry-content">
+					<div id="st-program-info-container" class="st-program-info-container">
+						<div class="st-day-container">
+							<div class="st-icon-container">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#21689D" class="bi bi-calendar" viewBox="0 0 16 16">
+									<path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+								</svg>
+							</div>
+							<div class="text-container">
+								<span><?php esc_html_e( 'Day', 'st-webinar-management' ); ?></span>
+								<span>
+									<?php esc_html_e( 'Fourth-fair', 'st-webinar-management' ); ?>
+									<?php echo esc_attr( gmdate( 'd F', strtotime( $start_date[0] ) ) ); ?>
+								</span>
+							</div>
 						</div>
-						<div class="st-highlight-description">
-							<?php echo esc_html( $highlight['highlightDescription'] ); ?>
+						<div  class="st-schedule-container">
+							<div class="st-icon-container">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="#21689D" class="bi bi-clock" viewBox="0 0 16 16">
+									<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
+									<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
+								</svg>
+							</div>
+							<div class="text-container">
+								<span><?php esc_html_e( 'Schedule', 'st-webinar-management' ); ?></span>
+								<span>
+									<?php echo esc_attr( "{$start_date[1]}, UTC$start_date[2]" ); ?>
+								</span>
+							</div>
+						</div>
+						<div  class="st-duration-container">
+							<div class="st-icon-container">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="#21689D" class="bi bi-hourglass-split" viewBox="0 0 16 16">
+									<path d="M2.5 15a.5.5 0 1 1 0-1h1v-1a4.5 4.5 0 0 1 2.557-4.06c.29-.139.443-.377.443-.59v-.7c0-.213-.154-.451-.443-.59A4.5 4.5 0 0 1 3.5 3V2h-1a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-1v1a4.5 4.5 0 0 1-2.557 4.06c-.29.139-.443.377-.443.59v.7c0 .213.154.451.443.59A4.5 4.5 0 0 1 12.5 13v1h1a.5.5 0 0 1 0 1zm2-13v1c0 .537.12 1.045.337 1.5h6.326c.216-.455.337-.963.337-1.5V2zm3 6.35c0 .701-.478 1.236-1.011 1.492A3.5 3.5 0 0 0 4.5 13s.866-1.299 3-1.48zm1 0v3.17c2.134.181 3 1.48 3 1.48a3.5 3.5 0 0 0-1.989-3.158C8.978 9.586 8.5 9.052 8.5 8.351z"/>
+								</svg>
+							</div>
+							<div class="text-container">
+								<span><?php esc_html_e( 'Duration', 'st-webinar-management' ); ?></span>
+								<span>
+									<?php echo esc_html( get_post_meta( get_the_ID(), 'duration', true ) ); ?>
+								</span>
+							</div>
 						</div>
 					</div>
-				<?php endforeach; ?>
-			<?php endif; ?>
-		</div>
-		<!-- Program Highlights -->
-		<!-- Speakers -->
-		<div class="st-speakers-container">
-			<?php $speakers = get_post_meta( get_the_ID(), 'speakers', true ); ?>
-			<?php if ( ! empty( $speakers ) ) : ?>
-				<!-- section-header -->
-				<header class="st-webinar-section-header">
-					<h2 class="st-webinar-section-title"><?php esc_html_e( 'Speakers', 'st-webinar-management' ); ?></h2>
-					<div class="st-color-bar-h2"></div>
-				</header>
-				<!-- section-header -->
-				<!-- Speaker Section Content -->
-				<div class="st-speaker-grid-container">
-					<?php foreach ( $speakers as $speaker ) : ?>
-						<?php $avatars = array_values( json_decode( $speaker['avatar_urls'], true ) ); ?>
-						<figure class="st-speaker-card">
-							<img class="st-speaker-image" src="<?php echo esc_url_raw( $avatars[ count( $avatars ) - 1 ] ); ?>" alt="<?php echo esc_html( $post->title ); ?>" />
-							<p>
-								<figcaption class="st-speaker-name"><?php echo esc_html( $speaker['name'] ); ?></figcaption>
-								<figcaption class="st-speaker-details"><?php echo esc_html( $speaker['description'] ); ?></figcaption>
-							<p>
-						</figure>
-	<!-- 					<div class="st-speaker">
-							<div class="st-speaker-avatar">
+					<figure id="st-post-thumbnail" class="st-post-thumbnail">
+						<img src="<?php echo esc_url_raw( get_the_post_thumbnail_url( get_the_ID() ) ); ?>" class="st-webinar-banner" />
+					</figure>
+					<div id="wp-block-st-webinar-management-webinar" class="wp-block-st-webinar-management-webinar">
+						<header class="st-webinar-section-header">
+							<h2 class="st-webinar-section-title"><?php esc_html_e( 'Webinar Details', 'st-webinar-management' ); ?></h2>
+							<div class="st-color-bar-h2"></div>
+						</header>
+
+						<?php
+						echo wp_kses_post( get_the_content() );
+
+						// wp_link_pages(
+						// array(
+						// 'before'   => '<nav class="page-links" aria-label="' . esc_attr__( 'Page', 'twentytwentyone' ) . '">',
+						// 'after'    => '</nav>',
+						// * translators: %: Page number. */
+						// 'pagelink' => esc_html__( 'Page %', 'twentytwentyone' ),
+						// )
+						// );
+						?>
+					</div>
+				</div><!-- .entry-content -->
+				<!-- Program Highlights -->
+				<div class="st-highlight-content">
+					<?php $highlights = get_post_meta( get_the_ID(), 'highlightRows', true ); ?>
+					<?php if ( ! empty( $highlights ) ) : ?>
+						<!-- section-header -->
+						<header class="st-webinar-section-header">
+							<h2 class="st-webinar-section-title"><?php esc_html_e( 'Program', 'st-webinar-management' ); ?></h2>
+							<div class="st-color-bar-h2"></div>
+						</header>
+						<!-- section-header -->
+						<?php foreach ( $highlights as $highlight ) : ?>
+							<div class="st-highlight">
+								<div class="st-highlight-time">
+									<?php echo esc_attr( gmdate( 'H:i', strtotime( $highlight['highlightTime'] ) ) ); ?>
+								</div>
+								<div class="st-highlight-description">
+									<?php echo esc_html( $highlight['highlightDescription'] ); ?>
+								</div>
+							</div>
+						<?php endforeach; ?>
+					<?php endif; ?>
+				</div>
+				<!-- Program Highlights -->
+				<!-- Speakers -->
+				<div class="st-speakers-container">
+					<?php $speakers = get_post_meta( get_the_ID(), 'speakers', true ); ?>
+					<?php if ( ! empty( $speakers ) ) : ?>
+						<!-- section-header -->
+						<header class="st-webinar-section-header">
+							<h2 class="st-webinar-section-title"><?php esc_html_e( 'Speakers', 'st-webinar-management' ); ?></h2>
+							<div class="st-color-bar-h2"></div>
+						</header>
+						<!-- section-header -->
+						<!-- Speaker Section Content -->
+						<div class="st-speaker-grid-container">
+							<?php foreach ( $speakers as $speaker ) : ?>
 								<?php $avatars = array_values( json_decode( $speaker['avatar_urls'], true ) ); ?>
-								<img src="<?php echo esc_url_raw( $avatars[ count( $avatars ) - 1 ] ); ?>" />
-							</div>
-							<div class="st-speaker-name">
-								<?php echo esc_html( $speaker['name'] ); ?>
-							</div>
-							<div class="st-speaker-description">
-								<?php echo esc_html( $speaker['description'] ); ?>
-							</div>
-						</div> -->
-					<?php endforeach; ?>
+								<figure class="st-speaker-card">
+									<img class="st-speaker-image" src="<?php echo esc_url_raw( $avatars[ count( $avatars ) - 1 ] ); ?>" alt="<?php echo esc_html( $post->title ); ?>" />
+									<p>
+										<figcaption class="st-speaker-name"><?php echo esc_html( $speaker['name'] ); ?></figcaption>
+										<figcaption class="st-speaker-details"><?php echo esc_html( $speaker['description'] ); ?></figcaption>
+									<p>
+								</figure>
+							<?php endforeach; ?>
+						</div>
+					<?php endif; ?>
 				</div>
-			<?php endif; ?>
+				<!-- Speakers -->
+
+				<footer class="entry-footer default-max-width">
+					<?php twenty_twenty_one_entry_meta_footer(); ?>
+				</footer><!-- .entry-footer -->
+
+				<?php if ( ! is_singular( 'attachment' ) ) : ?>
+					<?php get_template_part( 'template-parts/post/author-bio' ); ?>
+				<?php endif; ?>
+			</div>
+			<div id="st-registration-form-container">
+			</div>
 		</div>
-		<!-- Speakers -->
-
-		<footer class="entry-footer default-max-width">
-			<?php twenty_twenty_one_entry_meta_footer(); ?>
-		</footer><!-- .entry-footer -->
-
-		<?php if ( ! is_singular( 'attachment' ) ) : ?>
-			<?php get_template_part( 'template-parts/post/author-bio' ); ?>
-		<?php endif; ?>
-
 	</article><!-- #post-<?php the_ID(); ?> -->
 <?php endif; ?>

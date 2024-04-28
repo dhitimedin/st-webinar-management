@@ -9,7 +9,8 @@ module.exports = {
     ...defaultConfig,
     entry: {
         'webinar': './src/webinar/js/block-editor-script.jsx',
-        'highlight': './src/highlight/js/highlight.jsx'
+        'highlight': './src/highlight/js/highlight.jsx',
+        'registration': './src/registration/js/render-form.jsx',
     },
 
     output: {

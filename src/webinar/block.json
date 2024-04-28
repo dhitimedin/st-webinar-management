@@ -60,8 +60,9 @@
 			"default": []
 		}
 	},
-    "script": "file:./js/webinar.min.js",
+    "editorScript": "file:./js/webinar.min.js",
 	"style": "file:./css/webinar.min.css",
+	"viewScript": "file:./../registration/js/registration.min.js",
     "supports": {
 		"anchor": true
    	}
