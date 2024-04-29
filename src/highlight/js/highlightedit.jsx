@@ -68,12 +68,7 @@ export default function HighlightEdit({ attributes, setAttributes }) {
 	const updateHighlightRow = (rowIndex, newData) => {
 		const updatedRows = rows.map((row, index) => {
 			if (index === rowIndex) {
-				const updatedRow = { ...row, ...newData };
-				// Convert highlightTime to string if it exists
-				if (newData.highlightTime) {
-					updatedRow.highlightTime = newData.highlightTime.format('YYYY-MM-DD HH:mm');
-				}
-				return updatedRow;
+				return { ...row, ...newData };
 			}
 			return row;
 		});
@@ -92,7 +87,7 @@ export default function HighlightEdit({ attributes, setAttributes }) {
 							label={__('Basic time picker', 'st-webinar-management')}
 							value={row.highlightTime ? dayjs(row.highlightTime) : null}
 							onChange={
-								(newValue) => updateHighlightRow(row.index, { ...row, highlightTime: newValue })
+								(newValue) => updateHighlightRow(row.index, { ...row, highlightTime: newValue.format('YYYY-MM-DD HH:mm') })
 							}
 							minTime={minTimeState ? dayjs(minTimeState) : null}
 							maxTime={maxTimeState ? dayjs(maxTimeState) : null}
