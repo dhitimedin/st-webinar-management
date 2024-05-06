@@ -38,8 +38,9 @@ class ST_Webinar_Submit_Form {
 			'st-webinar-management/v1',
 			'/submit-form',
 			array(
-				'methods'  => 'POST',
-				'callback' => array( $this, 'handle_form_submission' ),
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'handle_form_submission' ),
+				'permission_callback' => '__return_true',
 			)
 		);
 	}

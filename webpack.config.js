@@ -11,6 +11,7 @@ module.exports = {
         'webinar': './src/webinar/js/block-editor-script.jsx',
         'highlight': './src/highlight/js/highlight.jsx',
         'registration': './src/registration/js/render-form.jsx',
+        'promotion': './src/promotion/js/promotion.jsx',
     },
 
     output: {

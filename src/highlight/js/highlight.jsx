@@ -6,8 +6,8 @@ import HighlightEdit from './highlightedit';
 import '../scss/highlight.scss';
 
 registerBlockType(metadata.name, {
-	title: 'Webinar Highlight',
-	icon: 'clock', // Same icon as defined in blocks.json
+	title: metadata.title,
+	icon: metadata.icon, // Same icon as defined in blocks.json
 	category: 'common',
 	attributes: {
 		highlightRows: {

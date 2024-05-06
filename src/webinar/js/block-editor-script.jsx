@@ -8,8 +8,8 @@ import Edit from './edit';
 import '../scss/block-editor.scss';
 
 registerBlockType(metadata.name /* 'st-webinar-management/webinar' */, {
-	title: 'Webinar',
-	icon: 'dashicons-megaphone',
+	title: metadata.title,
+	icon: metadata.icon,
 	edit: Edit,
 	save: ({ attributes }) => (
 		<RichText.Content

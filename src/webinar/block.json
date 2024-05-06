@@ -3,7 +3,7 @@
 	"apiVersion": 2,
 	"name": "st-webinar-management/webinar",
 	"title": "Webinar",
-	"icon": "dashicons-megaphone",
+	"icon": "megaphone",
 	"category": "common",
 	"keywords": ["webinar", "presentation", "event"],
 	"textdomain": "st-webinar-management",
@@ -62,7 +62,6 @@
 	},
     "editorScript": "file:./js/webinar.min.js",
 	"style": "file:./css/webinar.min.css",
-	"viewScript": "file:./../registration/js/registration.min.js",
     "supports": {
 		"anchor": true
    	}

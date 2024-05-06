@@ -1,0 +1,74 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "st-webinar-management/promotion",
+    "title": "Webinar Promotion",
+	  	"keywords": ["webinar", "presentation", "event", "promotion"],
+    "category": "text",
+    "icon": "groups",
+    "textdomain": "st-webinar-management",
+    "script": "file:./js/promotion.min.js",
+    "style":"file:./css/promotion.min.css",
+    "attributes": {
+		"selectedWebinarId": {
+			"type": "number",
+			"default": 0
+		},
+        "selectedWebinarDetails": {
+            "type": "object",
+			"className": {
+				"type": "string"
+			},
+            "properties": {
+                "title": {
+                    "type": "object",
+					"properties": {
+						"raw": {
+							"type": "string"
+						},
+						"rendered": {
+							"type": "string"
+						}
+					}
+                },
+                "meta": {
+                    "type": "object",
+                    "properties": {
+                        "subtitle": {
+                            "type": "string"
+                        },
+                        "startDate": {
+                            "type": "string"
+                        },
+                        "duration": {
+                            "type": "string"
+                        },
+                        "speakers": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+									"id": {
+										"type": "number"
+									},
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "avatar_urls": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "supports": {
+      "html": false
+    }
+}

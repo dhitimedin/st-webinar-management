@@ -191,6 +191,7 @@ class ST_Webinar_Management {
 	public function st_register_webinar_blocks() {
 		register_block_type( ST_WEBINAR_MANAGEMENT_PLUGIN_DIR . '/assets/webinar' );
 		register_block_type( ST_WEBINAR_MANAGEMENT_PLUGIN_DIR . '/assets/highlight' );
+		register_block_type( ST_WEBINAR_MANAGEMENT_PLUGIN_DIR . '/assets/promotion' );
 	}
 
 
