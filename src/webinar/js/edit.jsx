@@ -2,7 +2,7 @@ import React from 'react';
 import { useEntityProp } from '@wordpress/core-data';
 import { useSelect, dispatch } from '@wordpress/data';
 import { useState, useEffect } from '@wordpress/element';
-import { InspectorControls, RichText } from '@wordpress/block-editor';
+import { InspectorControls, RichText, useBlockProps } from '@wordpress/block-editor';
 import {
 	PanelBody,
 	TextControl,
@@ -45,15 +45,20 @@ export default function Edit({ attributes, setAttributes }) {
 
 	useEffect(() => {
 		setMeta({ ...meta, title: postTitle });
+		setAttributes({ ...attributes, title: postTitle });
 	}, [postTitle]);
 
 	useEffect(() => {
 		// Update isStartDateSelected on startDate change
-		setIsStartDateSelected(!!startDate);
+		setIsStartDateSelected(!!attributes.startDate);
+		if ( attributes.startDate ) {;
+			setTimeCheck(attributes.startDate);
+		}
 	}, [startDate]);
 
 	const onChangeSubtitle = (newSubtitle) => {
 		setMeta({ ...meta, subtitle: newSubtitle });
+		setAttributes({ ...attributes, subtitle: newSubtitle });
 	};
 
 	const onChangeStartDate = (newStartDate) => {
@@ -148,17 +153,32 @@ export default function Edit({ attributes, setAttributes }) {
 
 	const onChangeRegistrationForm = (newRegistrationForm) => {
 		setMeta({ ...meta, registrationForm: newRegistrationForm });
+		setAttributes({ ...attributes, registrationForm: newRegistrationForm });
 	};
 
 	const onChangeStreamingLink = (newStreamingLink) => {
 		setMeta({ ...meta, streamingLink: newStreamingLink });
+		setAttributes({ ...attributes, streamingLink: newStreamingLink });
 	};
 
-	// Inside the `edit` function:
 	const onChangeSpeakers = (newSpeakers) => {
-		setAttributes({ ...attributes, speakers: newSpeakers });
-		setMeta({ ...meta, speakers: newSpeakers });
-		// Update block state if necessary (consider using setAttributes)
+		// Ensure that each speaker's avatar_urls field is a properly formatted string.
+		const formattedSpeakers = newSpeakers.map((speaker) => ({
+			...speaker,
+			avatar_urls: typeof speaker.avatar_urls === 'string' ? speaker.avatar_urls : JSON.stringify(speaker.avatar_urls),
+			id: parseInt(speaker.id),
+		}));
+
+		console.log( formattedSpeakers );
+		console.log( formattedSpeakers[0]?.avatar_urls );
+		console.log( typeof formattedSpeakers[0]?.avatar_urls );
+		console.log( typeof formattedSpeakers[0]?.id );
+		console.log( typeof formattedSpeakers[0]?.description );
+		console.log( typeof formattedSpeakers[0]?.name );
+
+		// Update both block attributes and meta.
+		setAttributes({ ...attributes, speakers: [...formattedSpeakers] });
+		setMeta({ ...meta, speakers: formattedSpeakers });
 	};
 
 	return (
@@ -167,7 +187,7 @@ export default function Edit({ attributes, setAttributes }) {
 				<PanelBody title={__('Speakers', 'st-webinar-management')}>
 					<SpeakersChecklistControl
 						label={__('Select Speakers', 'st-webinar-management')}
-						speakers={speakers}
+						speakers={attributes.speakers ? attributes.speakers : [] }
 						setMeta={setMeta}
 						onChange={onChangeSpeakers} // Update speakers using setMeta
 					/>
@@ -177,7 +197,7 @@ export default function Edit({ attributes, setAttributes }) {
 				{/* Textboxes for title, subtitle, and other details */}
 				<TextControl
 					label={__('Subtitle', 'st-webinar-management')}
-					value={subtitle}
+					value={attributes.subtitle}
 					onChange={onChangeSubtitle}
 				/>
 				<div className="webinar-date-time-diuration-container">
@@ -185,7 +205,7 @@ export default function Edit({ attributes, setAttributes }) {
 						<LocalizationProvider dateAdapter={AdapterDayjs}>
 							<DateTimePicker
 								label={__('Begins at', 'st-webinar-management')}
-								value={startDate ? dayjs(startDate) : null}
+								value={attributes.startDate ? dayjs(attributes.startDate) : null}
 								onChange={onChangeStartDate}
 							/>
 						</LocalizationProvider>
@@ -194,7 +214,7 @@ export default function Edit({ attributes, setAttributes }) {
 						<LocalizationProvider dateAdapter={AdapterDayjs}>
 							<DateTimePicker
 								label={__('Ends at', 'st-webinar-management')}
-								value={endDate ? dayjs(endDate) : null}
+								value={attributes.endDate ? dayjs(attributes.endDate) : null}
 								onChange={onChangeEndDate}
 								minTime={timeCheck ? dayjs(timeCheck) : null}
 								minDate={timeCheck ? dayjs(timeCheck) : null}
@@ -205,7 +225,7 @@ export default function Edit({ attributes, setAttributes }) {
 					<div style={{ display: 'flex', position: 'relative' }}>
 						<TextControl
 							label={__('Duration', 'st-webinar-management')}
-							value={selectedDuration}
+							value={attributes.duration}
 							className="st-diable-duration"
 						/>
 					</div>
@@ -213,12 +233,12 @@ export default function Edit({ attributes, setAttributes }) {
 				<div style={{ display: 'flex', justifyContent: 'space-between' }}>
 					<TextControl
 						label={__('Registration Form', 'st-webinar-management')}
-						value={registrationForm}
+						value={attributes.registrationForm}
 						onChange={onChangeRegistrationForm}
 					/>
 					<TextControl
 						label={__('Streaming Link', 'st-webinar-management')}
-						value={streamingLink}
+						value={attributes.streamingLink}
 						onChange={onChangeStreamingLink}
 					/>
 				</div>
@@ -290,7 +310,7 @@ const SpeakersChecklistControl = (props) => {
 						key={speaker.id}
 						label={speaker.name}
 						// Use props.metaKey.speakers for safety
-						checked={speakers.some((selected) => selected.id === speaker.id)}
+						checked={speakers?.some((selected) => selected.id === speaker.id)}
 						onChange={(checked) => handleChange(speaker.id, checked)}
 					/>
 				))

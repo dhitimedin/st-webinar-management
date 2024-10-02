@@ -22,7 +22,7 @@ const WebinarDetails = ({ webinarDetails }) => {
     return (
         <>
 		  <Heading title={webinarDetails?.title.rendered} />
-		  <Subheading subtitle={webinarDetails?.meta.subtitle} />
+		  <Subheading subtitle={webinarDetails?.meta.subTitle} />
 		  <List items={webinarListDetails} />
 		  <Button
 			variant="secondary"

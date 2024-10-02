@@ -147,6 +147,6 @@ class ST_Webinar_Management_Dependency_Checker {
 	 */
 	private static function get_critical_screen_ids() {
 		// TODO:Replace with actual screen ids.
-		return array( 'dashboard', 'plugins', 'plugins-network', 'edit-job_listing', 'job_listing_page_job-manager-settings' );
+		return array( 'dashboard', 'plugins', 'plugins-network' );
 	}
 }

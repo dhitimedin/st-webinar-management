@@ -42,27 +42,37 @@
 		},
 		"speakers": {
 			"type": "array",
-			"source": "query",
-			"query": {
-				"id":{
-					"type": "integer"
-				},
-				"name": {
-					"type": "string"
-				},
-				"description": {
-					"type": "string"
-				},
-				"avatar_urls":{
-					"type": "string"
+			"items": {
+				"type": "object",
+				"properties": {
+					"id":{
+						"type": "integer"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"avatar_urls":{
+						"type": "string"
+					}
 				}
 			},
-			"default": []
+			"default": [
+				{
+					"id": 2,
+					"name": "Ram Lochan",
+					"description": "Highly motivated and results-oriented professional with 23+ years of experience in the software industry.\r\nProven ability to leverage technological expertise, leadership skills, and business acumen to build and scale\r\nsoftware businesses. Seeking to utilise strong WordPress, JavaScript, React, PHP, HTML, and CSS skills for\r\nnew challenges and opportunities. Possesses a fair understanding of Django and Python.\r\nCurrently exploring new business ventures and offering freelance development services.",
+					"avatar_urls": "{\"24\":\"http://2.gravatar.com/avatar/82f4746a3486e7f43f31f182e36b3552?s=24&d=mm&r=g\",\"48\":\"http://2.gravatar.com/avatar/82f4746a3486e7f43f31f182e36b3552?s=48&d=mm&r=g\",\"96\":\"http://2.gravatar.com/avatar/82f4746a3486e7f43f31f182e36b3552?s=96&d=mm&r=g\"}"
+				}
+			]
 		}
 	},
     "editorScript": "file:./js/webinar.min.js",
 	"style": "file:./css/webinar.min.css",
     "supports": {
 		"anchor": true
-   	}
+   	},
+	"render": "file:./render.php"
 }
