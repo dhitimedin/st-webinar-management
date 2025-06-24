@@ -46,13 +46,9 @@ class ST_Webinar_Management {
 	public function __construct() {
 
 		// Includes.
-
-		/*
-		A.
 		if ( is_admin() ) {
 			include_once ST_WEBINAR_MANAGEMENT_PLUGIN_DIR . '/includes/admin/class-st-webinar-management-admin.php';
 		}
-		*/
 		include_once ST_WEBINAR_MANAGEMENT_PLUGIN_DIR . '/includes/class-st-webinar-submit-form.php';
 
 		add_action( 'init', array( $this, 'st_webinar_management_init' ) );
@@ -110,7 +106,7 @@ class ST_Webinar_Management {
 		$table_name      = $wpdb->prefix . 'webinar_viewers_entries';
 		$charset_collate = $wpdb->get_charset_collate();
 
-		$sql = "CREATE TABLE $table_name (
+		$sql_viewers = "CREATE TABLE $table_name (
 			`first_name` VARCHAR(255) NOT NULL,
 			`last_name` VARCHAR(255) NOT NULL,
 			`email` VARCHAR(255) NOT NULL,
@@ -118,9 +114,37 @@ class ST_Webinar_Management {
 			PRIMARY KEY (email)
 		) $charset_collate;";
 
+		$table_name_templates      = $wpdb->prefix . 'webinar_email_templates';
+		$sql_templates = "CREATE TABLE $table_name_templates (
+			`id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+			`name` VARCHAR(255) NOT NULL,
+			`subject` VARCHAR(255) NOT NULL,
+			`body` LONGTEXT NOT NULL,
+			`created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY (id)
+		) $charset_collate;";
+
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-		dbDelta( $sql );
+		dbDelta( $sql_viewers );
+		dbDelta( $sql_templates );
+
+		$table_name_scheduled_emails = $wpdb->prefix . 'webinar_scheduled_emails';
+		$sql_scheduled_emails = "CREATE TABLE $table_name_scheduled_emails (
+			`id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+			`webinar_id` BIGINT(20) NOT NULL,
+			`email_type` VARCHAR(50) NOT NULL, -- 'reminder', 'post_event'
+			`recipient_email` VARCHAR(255) NOT NULL,
+			`template_id` BIGINT(20) NOT NULL,
+			`scheduled_at` datetime NOT NULL,
+			`status` VARCHAR(20) NOT NULL DEFAULT 'pending', -- 'pending', 'sent', 'failed'
+			`created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY (id),
+			INDEX webinar_id_idx (webinar_id),
+			INDEX status_idx (status),
+			INDEX scheduled_at_idx (scheduled_at)
+		) $charset_collate;";
+		dbDelta( $sql_scheduled_emails );
 	}
 
 	/**
