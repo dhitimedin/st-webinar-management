@@ -90,12 +90,103 @@ class ST_Webinar_Submit_Form {
 			// Apply filter to submitted data and timestamp.
 			do_action( 'st_webinar_submission', $form_data );
 
+			// Email Integration
+			$this->handle_email_integration( $form_data );
+
 			return rest_ensure_response( __( 'Form submission successful.', 'st-webinar-management' ) );
 		} else {
 			return new WP_Error( 'form_submission_failed', __( 'Failed to submit form data.', 'st-webinar-management' ), array( 'status' => 500 ) );
 		}
 	}
 
+	/**
+	 * Handles email integration with Mailchimp or Mautic.
+	 *
+	 * @param array $form_data The form data.
+	 */
+	private function handle_email_integration( $form_data ) {
+		$platform = get_option( 'st_webinar_email_platform' );
+
+		if ( 'mailchimp' === $platform ) {
+			$api_key = get_option( 'st_webinar_mailchimp_api_key' );
+			$list_id = get_option( 'st_webinar_mailchimp_list_id' );
+
+			if ( ! empty( $api_key ) && ! empty( $list_id ) ) {
+				$server_prefix = substr( $api_key, strrpos( $api_key, '-' ) + 1 );
+				$url           = "https://{$server_prefix}.api.mailchimp.com/3.0/lists/{$list_id}/members/";
+
+				$response = wp_remote_post(
+					$url,
+					array(
+						'headers' => array(
+							'Authorization' => 'Basic ' . base64_encode( 'user:' . $api_key ),
+							'Content-Type'  => 'application/json',
+						),
+						'body'    => json_encode(
+							array(
+								'email_address' => $form_data['email'],
+								'status'        => 'subscribed',
+								'merge_fields'  => array(
+									'FNAME' => $form_data['first_name'],
+									'LNAME' => $form_data['last_name'],
+								),
+							)
+						),
+					)
+				);
+
+				if ( is_wp_error( $response ) ) {
+					// Handle Mailchimp API error
+					error_log( 'Mailchimp API Error: ' . $response->get_error_message() );
+				} else {
+					$body = json_decode( wp_remote_retrieve_body( $response ) );
+					if ( isset( $body->status ) && 'subscribed' !== $body->status && isset( $body->title ) ) {
+						// Handle Mailchimp API error response
+						error_log( 'Mailchimp Subscription Error: ' . $body->title . ' - ' . $body->detail );
+					}
+				}
+			}
+		} elseif ( 'mautic' === $platform ) {
+			$mautic_url      = get_option( 'st_webinar_mautic_url' );
+			$mautic_username = get_option( 'st_webinar_mautic_username' );
+			$mautic_password = get_option( 'st_webinar_mautic_password' );
+
+			if ( ! empty( $mautic_url ) && ! empty( $mautic_username ) && ! empty( $mautic_password ) ) {
+				$url      = trailingslashit( $mautic_url ) . 'api/contacts/new';
+				$response = wp_remote_post(
+					$url,
+					array(
+						'headers' => array(
+							'Authorization' => 'Basic ' . base64_encode( $mautic_username . ':' . $mautic_password ),
+							'Content-Type'  => 'application/json',
+						),
+						'body'    => json_encode(
+							array(
+								'firstname' => $form_data['first_name'],
+								'lastname'  => $form_data['last_name'],
+								'email'     => $form_data['email'],
+							)
+						),
+					)
+				);
+
+				if ( is_wp_error( $response ) ) {
+					// Handle Mautic API error
+					error_log( 'Mautic API Error: ' . $response->get_error_message() );
+				} else {
+					$body = json_decode( wp_remote_retrieve_body( $response ) );
+					if ( isset( $body->errors ) ) {
+						// Handle Mautic API error response
+						$error_messages = array();
+						foreach ( $body->errors as $error ) {
+							$error_messages[] = $error->message;
+						}
+						error_log( 'Mautic Error: ' . implode( ', ', $error_messages ) );
+					}
+				}
+			}
+		}
+	}
 
 	/**
 	 * Enqueue 'registration.min.js' script on single 'webinar' post pages.
