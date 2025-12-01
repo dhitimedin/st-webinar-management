@@ -1,5 +1,9 @@
 # Webinar Management Plugin #
 
+Swapn Deep made one line change here, please be care full......
+
+
+
 Streamline webinar management directly from your WordPress site. This plugin provides a user-friendly interface for creating, managing, and promoting webinars, integrating seamlessly with Gutenberg for a cohesive editing experience.
 
 # Features:
